@@ -1,2 +1,0 @@
-/* clue_sheet.c */
-
