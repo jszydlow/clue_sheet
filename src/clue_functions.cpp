@@ -48,18 +48,19 @@ int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRIN
 
 	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name (case sensitive)." << ENDL;	
 
-	update_value(players, player_count, master);
+	input_user_cards(players, cards_per_player, player_count, master);
 
 	return cards_per_player;
 }
 
-void update_value(VECTOR<Player> & players, int count, MAP<STRING, int> & master) {
+void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master) {
 	
 	MAP <STRING, int>::iterator i;
 	int type;
 	STRING item;
 
-	for (int iter = 0; iter < count; iter++) {
+
+	for (int iter = 0; iter < cards_per_player; iter++) {
 		
 		COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
 		CIN >> type;
@@ -76,6 +77,13 @@ void update_value(VECTOR<Player> & players, int count, MAP<STRING, int> & master
 					i->second = 1;
 				}
 
+				for (int jter = 1; jter < player_count; jter++) {
+					i = players[jter].characters.find(item);
+					if (i != players[jter].characters.end()) {
+						i->second = 3;
+					}
+				}
+
 				break;
 
 			case 2:
@@ -87,6 +95,13 @@ void update_value(VECTOR<Player> & players, int count, MAP<STRING, int> & master
 					i->second = 1;
 				}
 
+				for (int jter = 1; jter < player_count; jter++) {
+					i = players[jter].weapons.find(item);
+					if (i != players[jter].weapons.end()) {
+						i->second = 3;
+					}
+				}
+
 				break;
 
 			case 3:
@@ -96,6 +111,13 @@ void update_value(VECTOR<Player> & players, int count, MAP<STRING, int> & master
 
 				if (i != players[0].rooms.end()) {
 					i->second = 1;
+				}
+
+				for (int jter = 1; jter < player_count; jter++) {
+					i = players[jter].rooms.find(item);
+					if (i != players[jter].rooms.end()) {
+						i->second = 3;
+					}
 				}
 
 				break;

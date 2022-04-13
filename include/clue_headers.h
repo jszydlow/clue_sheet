@@ -59,5 +59,5 @@ typedef struct Player {
 int introduction();
 void build_players_array(VECTOR<Player> & players, int player_count);
 int update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
-void update_value(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
+void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master);
 void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
