@@ -24,6 +24,10 @@
 #define OFSTREAM std::ofstream
 #define MAP std::map
 
+#define TOTALCHARACTERS 6
+#define TOTALWEAPONS 6
+#define TOTALROOMS 10
+
 //Function Prototypes:
 
 typedef struct Player {
@@ -61,3 +65,5 @@ void build_players_array(VECTOR<Player> & players, int player_count);
 int update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master);
 void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
+
+void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);

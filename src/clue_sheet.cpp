@@ -45,5 +45,7 @@ int main( ){
 
 	COUT << cards_per_player << ENDL; //this is just here to run without the unused parameter warning lol
 
+	update_info(players, player_count, master);
+
 	return 0;
 }

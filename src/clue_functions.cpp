@@ -144,7 +144,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 
 	for (int iter = 0; iter < extra_cards; iter++) {
 		COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-		CIN >> type;
+		CIN >> type; //input the type of category
 
 		COUT << "Please input the item name: ";
 
@@ -152,8 +152,8 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 			case 1:
 				GETLINE(CIN >> WS, item);
 				
-				for (int jter = 0; jter < player_count; jter++) {
-					i = players[jter].characters.find(item);
+				for (int jter = 0; jter < player_count; jter++) { //loops through the players
+					i = players[jter].characters.find(item); //say you're searching for Miss Scarlet .. i.e. player[0]-Mr.Green-Miss Scarlet?
 					if (i != players[jter].characters.end()) {
 						i->second = 3;
 					}
@@ -195,4 +195,65 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 	}
 
 	return;
+}
+
+
+void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
+	int personInt = -1;
+	int categoryInt = -1;
+	MAP <STRING, int>::iterator i;
+	STRING item;
+
+	COUT << ENDL << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
+		for (int iter = 0; iter < player_count; iter++) {
+			COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+		}
+	CIN >> personInt;
+
+	COUT << "Which category would you like to update? Please enter a number." << ENDL;
+	COUT << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+	CIN >> categoryInt;
+
+	COUT << "Pleade input the item name: ";
+
+	switch(categoryInt) {
+		case 1: //Characters
+			GETLINE(CIN >> WS, item);
+			/*
+			for (int jter = 0; jter < TOTALCHARACTERS; jter++) {
+				i = players[personInt].characters.find(item);
+				if (i == players[jter].characters.end()) {
+					i->second = 1; //this user definitely has the card
+				}
+			}
+			*/
+			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
+        		if (n.first == item) {
+					n.second = 1;
+					//COUT<<"Key (character) - "<<n.first<<" "<<" Value (1/0) - "<<n.second << ENDL;
+        		}
+    		}
+
+		case 2: //Weapons
+			GETLINE(CIN >> WS, item);
+
+			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
+        		if (n.first == item) {
+					n.second = 1;
+        		}
+    		}
+		}
+
+		case 3: //Rooms
+			GETLINE(CIN >> WS, item);
+
+			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
+        		if (n.first == item) {
+					n.second = 1;
+        		}
+    		}
+		}
+
+
+	
 }
