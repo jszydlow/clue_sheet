@@ -67,3 +67,4 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
+int print_menu();

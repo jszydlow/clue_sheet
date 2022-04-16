@@ -257,3 +257,19 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 
 	
 }
+
+int print_menu() {
+	int choice = 0;
+
+	COUT << "Select the action you would like to perform.\n";
+	COUT << "1: Print full Clue Sheet\n";
+	COUT << "2: Print a player.\n";
+	COUT << "3: Print items in a category.\n";
+	COUT << "4: Update info\n";
+	COUT << "5: Check for a solution.\n";
+	
+	CIN >>  choice;
+
+	return choice;
+	
+}
