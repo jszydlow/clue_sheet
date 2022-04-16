@@ -199,62 +199,149 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 
 
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
-	int personInt = -1;
-	int categoryInt = -1;
+	int personInt;
+	int categoryInt;
 	MAP <STRING, int>::iterator i;
 	STRING item;
+	bool forsure = false; //if the user is positive about their info, then this will become true
+	STRING posCheck; //this will be the y/n that the user inputs if they are/are not postive
+	STRING continueCheck; //this will be the y/n the user inputs if they want to keep updating info
+	bool keepgoing = true;
 
-	COUT << ENDL << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
-		for (int iter = 0; iter < player_count; iter++) {
-			COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
-		}
-	CIN >> personInt;
+  	while (keepgoing) {
 
-	COUT << "Which category would you like to update? Please enter a number." << ENDL;
-	COUT << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-	CIN >> categoryInt;
-
-	COUT << "Pleade input the item name: ";
-
-	switch(categoryInt) {
-		case 1: //Characters
-			GETLINE(CIN >> WS, item);
-			/*
-			for (int jter = 0; jter < TOTALCHARACTERS; jter++) {
-				i = players[personInt].characters.find(item);
-				if (i == players[jter].characters.end()) {
-					i->second = 1; //this user definitely has the card
-				}
+		COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
+			for (int iter = 0; iter < player_count; iter++) {
+				COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
 			}
-			*/
-			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
-        		if (n.first == item) {
-					n.second = 1;
-					//COUT<<"Key (character) - "<<n.first<<" "<<" Value (1/0) - "<<n.second << ENDL;
-        		}
-    		}
+		CIN >> personInt;
+		personInt--; //since c++ iterates starting from 0 but people don't
 
-		case 2: //Weapons
-			GETLINE(CIN >> WS, item);
+		COUT << "Are you positive about the information you are about to update? (y/n) ";
+		GETLINE (CIN >> WS, posCheck); //this will help figure out if the value in the maps should be a 1 or 2 for the user's given value
 
-			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
-        		if (n.first == item) {
-					n.second = 1;
-        		}
-    		}
+		if (posCheck == "y") {
+			forsure = true;
+			COUT << "Fantastic! Let's update.." << ENDL;
+		} else if (posCheck == "n") {
+			forsure = false;
+			COUT << "Ok, let's update your \"maybe's\"!" << ENDL;
 		}
 
-		case 3: //Rooms
-			GETLINE(CIN >> WS, item);
+		COUT << ENDL << "Which category would you like to update? Please enter a number." << ENDL;
+		COUT << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+		CIN >> categoryInt;
 
-			for(auto n:master) { //iterate through and update the master list once we have a definite (1) value
-        		if (n.first == item) {
-					n.second = 1;
-        		}
-    		}
+
+		COUT << "Please input the item name: ";
+
+		switch(categoryInt) {
+			case 1: //Characters
+				GETLINE (CIN >> WS, item);
+
+				if (forsure) {
+
+					i = players[personInt].characters.find(item); //update the specified player's map
+
+					if (i != players[personInt].characters.end()) {
+						i->second = 1;
+					}
+			
+					for (int jter = 0; jter < player_count; jter++) { //since the user is positive, set all the other players' cards to 3 (def don't have)
+						i = players[jter].characters.find(item);
+						if (jter == personInt) { continue; }
+						if (i != players[jter].characters.end()) {
+							i->second = 3;
+						}
+					}
+			
+					i = master.find(item); //iterate through and update the master list since we have a definite (1) value
+
+					if (i != master.end()) { i->second = 1; }
+
+				} else {
+					i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
+
+					if (i != players[personInt].characters.end()) {
+						i->second = 2;
+					}
+				}
+
+				break;
+
+			case 2: //Weapons
+				GETLINE (CIN >> WS, item);
+
+				if (forsure) {
+
+					i = players[personInt].weapons.find(item);
+
+					if (i != players[personInt].weapons.end()) {
+						i->second = 1;
+					}
+
+					for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+						i = players[jter].weapons.find(item);
+						if (jter == personInt) { continue; }
+						if (i != players[jter].weapons.end()) {
+							i->second = 3;
+						}
+					}
+
+					i = master.find(item);
+
+					if (i != master.end()) { i->second = 1; }
+				} else {
+					i = players[personInt].characters.find(item);
+
+					if (i != players[personInt].characters.end()) {
+						i->second = 2;
+					}
+				}
+
+				break;
+
+			case 3: //Rooms
+				GETLINE (CIN >> WS, item);
+
+				if (forsure) {
+
+					i = players[personInt].rooms.find(item);
+
+					if (i != players[personInt].rooms.end()) {
+						i->second = 1;
+					}
+
+					for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+						i = players[jter].rooms.find(item);
+						if (jter == personInt) { continue; }
+						if (i != players[jter].rooms.end()) {
+							i->second = 3;
+						}
+					}
+
+					i = master.find(item);
+
+					if (i != master.end()) { i->second = 1; }
+				} else {
+					i = players[personInt].characters.find(item);
+
+					if (i != players[personInt].characters.end()) {
+						i->second = 2;
+						COUT << item << "is a maybe" << ENDL;
+					}
+				}
+
+				break;
 		}
 
-
+	COUT << ENDL << "Would you like to update again? (y/n) ";
+	GETLINE (CIN >> WS, continueCheck);
+	if (continueCheck == "n") {
+		keepgoing = false;
+		break;
+	}
+  }
 	
 }
 
@@ -262,14 +349,82 @@ int print_menu() {
 	int choice = 0;
 
 	COUT << "Select the action you would like to perform.\n";
-	COUT << "1: Print full Clue Sheet\n";
+	COUT << "1: Print full Clue Sheet.\n";
 	COUT << "2: Print a player.\n";
 	COUT << "3: Print items in a category.\n";
-	COUT << "4: Update info\n";
+	COUT << "4: Update info.\n";
 	COUT << "5: Check for a solution.\n";
+	COUT << "6: Quit.\n";
 	
 	CIN >>  choice;
 
 	return choice;
 	
+}
+
+void print_player(VECTOR<Player> & players, int num) {
+	int iter;
+	num--; //reset to follow c++ iteration rules
+	COUT << ENDL;
+
+	for (iter = 0; iter < 45; iter++) { COUT << "-"; } //header for the display "box"
+	COUT << ENDL << "\t" << players[num].player_name << "\'s Known Information" << ENDL;
+	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
+	COUT << ENDL;
+
+	COUT << "CHARACTERS:" << ENDL;
+	for (int jter = 0; jter <= 11; jter++) { COUT << "-"; }
+	COUT << ENDL;
+
+	for (auto i : players[num].characters) {
+		COUT << i.first;
+		if (i.second == 1) {
+			COUT << std::right << setw(11) << " --> HAS";
+		} else if (i.second == 2) {
+			COUT << std::right << setw(20) << " --> maybe has.. ";
+		} else if (i.second == 3) {
+			COUT << std::right << setw(22) << " --> does not have ";
+		}
+		COUT << ENDL;
+	}
+
+	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
+
+	COUT << ENDL << "WEAPONS:" << ENDL;
+	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; }
+	COUT << ENDL;
+
+	for (auto i : players[num].weapons) {
+		COUT << i.first;
+		if (i.second == 1) {
+			COUT << std::right << setw(11) << " --> HAS";
+		} else if (i.second == 2) {
+			COUT << std::right << setw(20) << " --> maybe has.. ";
+		} else if (i.second == 3) {
+			COUT << std::right << setw(22) << " --> does not have ";
+		}
+		COUT << ENDL;
+	}
+
+	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
+
+	COUT << ENDL << "ROOMS:" << ENDL;
+	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; }
+	COUT << ENDL;
+
+	for (auto i : players[num].rooms) {
+		COUT << i.first;
+		if (i.second == 1) {
+			COUT << std::right << setw(11) << " --> HAS";
+		} else if (i.second == 2) {
+			COUT << std::right << setw(20) << " --> maybe has.. ";
+		} else if (i.second == 3) {
+			COUT << std::right << setw(22) << " --> does not have ";
+		}
+		COUT << ENDL;
+	}
+
+	for (iter = 0; iter < 45; iter++) { COUT << "-"; } //ending for the display "box"
+
+	COUT << ENDL;
 }

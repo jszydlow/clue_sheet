@@ -45,7 +45,33 @@ int main( ){
 
 	COUT << cards_per_player << ENDL; //this is just here to run without the unused parameter warning lol
 
-	update_info(players, player_count, master);
+	while (1) { //i know this scares Bui but it's the best thing for this case haha
+		COUT << ENDL;
+		int choice = print_menu();
+
+		switch (choice) {
+			case 1: //print full clue sheet
+				break;
+			case 2: //print a player
+				int personInt;
+				COUT << ENDL << "Which player information would you like to print? (1 - " << player_count << ") : " << ENDL;
+					for (int iter = 0; iter < player_count; iter++) {
+						COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+					}
+				CIN >> personInt;
+				print_player(players, personInt);
+				break;
+			case 3: //print items in a category
+				break;
+			case 4: //update info
+				update_info(players, player_count, master);
+				break;
+			case 5: //check for solution
+				break;
+			case 6: //quit
+				return 0;
+		}
+	}
 
 	return 0;
 }

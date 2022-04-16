@@ -12,6 +12,8 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <iomanip>
+#include <cstdio>
 
 #define COUT std::cout
 #define CIN std::cin
@@ -23,10 +25,12 @@
 #define IFSTREAM std::ifstream
 #define OFSTREAM std::ofstream
 #define MAP std::map
+#define setw std::setw
 
 #define TOTALCHARACTERS 6
 #define TOTALWEAPONS 6
 #define TOTALROOMS 10
+#define TOTALITEMS 22
 
 //Function Prototypes:
 
@@ -68,3 +72,4 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 int print_menu();
+void print_player(VECTOR<Player> & players, int num);
