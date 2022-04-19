@@ -197,7 +197,6 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 	return;
 }
 
-
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
 	int personInt;
 	int categoryInt;
@@ -260,10 +259,11 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					if (i != master.end()) { i->second = 1; }
 
 				} else {
+					COUT << "forsure is false - chars" << ENDL;
 					i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
 
-					if (i != players[personInt].characters.end()) {
-						i->second = 2;
+					if (i != players[personInt].characters.end()) { 
+						i->second = 2; 
 					}
 				}
 
@@ -291,12 +291,15 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					i = master.find(item);
 
 					if (i != master.end()) { i->second = 1; }
-				} else {
-					i = players[personInt].characters.find(item);
 
-					if (i != players[personInt].characters.end()) {
-						i->second = 2;
+				} else {
+					COUT << "forsure is false - weapons" << ENDL;
+					i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
+					
+					if (i != players[personInt].weapons.end()) { 
+						i->second = 2; 
 					}
+				
 				}
 
 				break;
@@ -323,13 +326,15 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					i = master.find(item);
 
 					if (i != master.end()) { i->second = 1; }
-				} else {
-					i = players[personInt].characters.find(item);
 
-					if (i != players[personInt].characters.end()) {
-						i->second = 2;
-						COUT << item << "is a maybe" << ENDL;
+				} else {
+					COUT << "forsure is false - rooms" << ENDL;
+					i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
+
+					if (i != players[personInt].rooms.end()) { 
+						i->second = 2; 
 					}
+					
 				}
 
 				break;
@@ -379,11 +384,11 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (auto i : players[num].characters) {
 		COUT << i.first;
 		if (i.second == 1) {
-			COUT << std::right << setw(11) << " --> HAS";
+			COUT << setfill(' ') << setw(10) << " --> HAS";
 		} else if (i.second == 2) {
-			COUT << std::right << setw(20) << " --> maybe has.. ";
+			COUT << setfill(' ') << setw(20) << " --> maybe has.. ";
 		} else if (i.second == 3) {
-			COUT << std::right << setw(22) << " --> does not have ";
+			COUT << setfill(' ') << setw(22) << "--> does not have ";
 		}
 		COUT << ENDL;
 	}
@@ -397,11 +402,11 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (auto i : players[num].weapons) {
 		COUT << i.first;
 		if (i.second == 1) {
-			COUT << std::right << setw(11) << " --> HAS";
+			COUT << setfill(' ') << setw(10) << " --> HAS";
 		} else if (i.second == 2) {
-			COUT << std::right << setw(20) << " --> maybe has.. ";
+			COUT << setfill(' ') << setw(20) << " --> maybe has.. ";
 		} else if (i.second == 3) {
-			COUT << std::right << setw(22) << " --> does not have ";
+			COUT << setfill(' ') << setw(22) << "--> does not have ";
 		}
 		COUT << ENDL;
 	}
@@ -415,11 +420,11 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (auto i : players[num].rooms) {
 		COUT << i.first;
 		if (i.second == 1) {
-			COUT << std::right << setw(11) << " --> HAS";
+			COUT << setfill(' ') << setw(10) << " --> HAS";
 		} else if (i.second == 2) {
-			COUT << std::right << setw(20) << " --> maybe has.. ";
+			COUT << setfill(' ') << setw(20) << " --> maybe has.. ";
 		} else if (i.second == 3) {
-			COUT << std::right << setw(22) << " --> does not have ";
+			COUT << setfill(' ') << setw(22) << "--> does not have ";
 		}
 		COUT << ENDL;
 	}
@@ -427,4 +432,132 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (iter = 0; iter < 45; iter++) { COUT << "-"; } //ending for the display "box"
 
 	COUT << ENDL;
+}
+
+void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms) {
+	MAP<STRING, int>::iterator i;
+	COUT << ENDL;
+	bool playersHand = false;
+	bool inMiddle = true;
+	int display;
+
+	for (display = 0; display < 45; display++) { COUT << "-" ; } //display header
+	COUT << ENDL;
+
+	if (num == 1) { //CHARACTERS  --> map #1-6
+
+		COUT << "CHARACTERS:" << ENDL; //title
+		for (int jter = 0; jter <= 11; jter++) { COUT << "-"; }
+		COUT << ENDL;
+
+		for (int iter = 0; iter < 6; iter++) {
+			COUT << thecharacters[iter];
+			i = master.find(thecharacters[iter]);
+
+			if (i != master.end() && i->second == 0) { //iterate through the master list to check for 0s
+				COUT << "\t " << ENDL;
+			} 
+			
+			else if (i != master.end() && i->second == 1) { //iterate through master to check for 1s
+				
+				for (int jter = 0; jter < player_count; jter++) { //if a 1 is found, iterate through all players and display which player has this card
+					for (auto x : players[jter].characters) { 
+						if (i->first == x.first && x.second == 1) {
+							playersHand = true;
+							inMiddle = false;
+							break;
+						} else {
+							playersHand = false;
+						}
+					}
+
+					if (playersHand) {
+						COUT << "\t--> " << players[jter].player_name << ENDL;
+					}
+				}
+				if (!playersHand && inMiddle) {
+					COUT << "\t--> In the middle" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
+				}
+			}
+		}
+	}
+	
+	else if (num == 2) { //WEAPONS --> map #7-12
+
+	COUT << "WEAPONS:" << ENDL;
+	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; }
+	COUT << ENDL;
+
+		for (int iter = 0; iter < 6; iter++) {
+			COUT << theweapons[iter];
+			i = master.find(theweapons[iter]);
+
+			if (i != master.end() && i->second == 0) { //iterate through the master list
+				COUT << "\t " << ENDL;
+			} 
+			
+			else if (i != master.end() && i->second == 1) { //iterate through master to check for 1s
+				
+				for (int jter = 0; jter < player_count; jter++) {
+					for (auto x : players[jter].weapons) { 
+						if (i->first == x.first && x.second == 1) {
+							playersHand = true;
+							inMiddle = false;
+							break;
+						} else {
+							playersHand = false;
+						}
+					}
+
+					if (playersHand) {
+						COUT << "\t--> " << players[jter].player_name << ENDL;
+					}
+				}
+				if (!playersHand && inMiddle) {
+					COUT << "\t--> In the middle" << ENDL;
+				}
+			}
+		}
+	} 
+	
+	else if (num == 3) { //ROOMS --> map #13-22
+
+	COUT << "ROOMS:" << ENDL;
+	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; }
+	COUT << ENDL;
+
+		for (int iter = 0; iter < 10; iter++) {
+			COUT << therooms[iter];
+			i = master.find(therooms[iter]);
+
+			if (i != master.end() && i->second == 0) { //iterate through the master list
+				COUT << "\t " << ENDL;
+			} 
+			
+			else if (i != master.end() && i->second == 1) { //iterate through master to check for 1s
+				
+				for (int jter = 0; jter < player_count; jter++) {
+					for (auto x : players[jter].rooms) { 
+						if (i->first == x.first && x.second == 1) {
+							playersHand = true;
+							inMiddle = false;
+							break;
+						} else {
+							playersHand = false;
+						}
+					}
+
+					if (playersHand) {
+						COUT << "\t--> " << players[jter].player_name << ENDL;
+					}
+				}
+				if (!playersHand && inMiddle) {
+					COUT << "\t--> In the middle" << ENDL;
+				}
+			}
+		}
+	}
+
+		for (display = 0; display < 45; display++) { COUT << "-"; } //display ending
+		COUT << ENDL;
 }

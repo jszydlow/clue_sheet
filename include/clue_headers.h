@@ -26,6 +26,7 @@
 #define OFSTREAM std::ofstream
 #define MAP std::map
 #define setw std::setw
+#define setfill std::setfill
 
 #define TOTALCHARACTERS 6
 #define TOTALWEAPONS 6
@@ -73,3 +74,4 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 int print_menu();
 void print_player(VECTOR<Player> & players, int num);
+void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms);
