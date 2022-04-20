@@ -561,3 +561,29 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 		for (display = 0; display < 45; display++) { COUT << "-"; } //display ending
 		COUT << ENDL;
 }
+
+void solver(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms) {
+
+	//First possible way to solve:
+	int notFound = 0; // if this equals exactly 3 then the solution was found
+	int iter = 0;
+/*	for (iter = 0; iter < master.size(), iter++) {
+		if master.at(iter) {
+			if (master.at(iter) == 0) {
+				notFound++;
+			}
+		}
+	}
+	if (notFound == 3) {
+		COUT << "Solved! Here is the solution: ";
+		for (iter = 0; iter < master.size(), iter++) {
+		if master.at(iter) {
+			if (master.at(iter) == 0) {
+				COUT << master.at(iter);
+			}
+		}
+	}
+
+	}
+	
+}
