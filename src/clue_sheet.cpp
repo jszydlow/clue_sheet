@@ -80,6 +80,7 @@ int main( ){
 				break;
 
 			case 5: //check for solution
+				solver(master);
 				break;
 
 			case 6: //quit

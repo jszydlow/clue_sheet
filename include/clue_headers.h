@@ -14,6 +14,7 @@
 #include <map>
 #include <iomanip>
 #include <cstdio>
+#include <cstring>
 
 #define COUT std::cout
 #define CIN std::cin
@@ -38,7 +39,7 @@
 typedef struct Player {
 
 	STRING player_name;
-
+	int num_knowns;
 	MAP <STRING, int> characters = {{"Miss Scarlet", 0},
 									{"Colonel Mustard", 0},
 									{"Mrs. White", 0},
@@ -75,3 +76,4 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 int print_menu();
 void print_player(VECTOR<Player> & players, int num);
 void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms);
+bool solver(MAP<STRING, int> & master);

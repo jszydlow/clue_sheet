@@ -24,10 +24,12 @@ void  build_players_array(VECTOR<Player> & players, int player_count) {
 	COUT << "Please input your name: ";
 
 	CIN >> players[0].player_name;
+	players[0].num_knowns = 0; //set your amount of known cards to zero
 
 	for (int iter = 1; iter < player_count; iter++) {
 		COUT << "Please input the name of the next player: ";
 		CIN >> players[iter].player_name;
+		players[iter].num_knowns = 0;//set this player instance's number of known cards
 	}
 
 	COUT << ENDL;
@@ -36,9 +38,11 @@ void  build_players_array(VECTOR<Player> & players, int player_count) {
 }
 
 int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
-
+	
 	int cards_per_player = 19 / player_count;
 	int extra_cards = 19 % player_count;
+
+	players[0].num_knowns = cards_per_player;
 
 	if (extra_cards != 0) {
 	
@@ -49,7 +53,7 @@ int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRIN
 	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name (case sensitive)." << ENDL;	
 
 	input_user_cards(players, cards_per_player, player_count, master);
-
+	
 	return cards_per_player;
 }
 
@@ -256,7 +260,10 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 			
 					i = master.find(item); //iterate through and update the master list since we have a definite (1) value
 
-					if (i != master.end()) { i->second = 1; }
+					if (i != master.end()) { 
+						i->second = 1; 
+						players[personInt].num_knowns++; //increment that that player has another known card
+					}
 
 				} else {
 					COUT << "forsure is false - chars" << ENDL;
@@ -290,7 +297,10 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 
 					i = master.find(item);
 
-					if (i != master.end()) { i->second = 1; }
+					if (i != master.end()) { 
+						i->second = 1; 
+						players[personInt].num_knowns++; //increment that that player has another known card
+					}
 
 				} else {
 					COUT << "forsure is false - weapons" << ENDL;
@@ -325,7 +335,10 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 
 					i = master.find(item);
 
-					if (i != master.end()) { i->second = 1; }
+					if (i != master.end()) { 
+						i->second = 1; 
+						players[personInt].num_knowns++; //increment that that player has another known card
+					}
 
 				} else {
 					COUT << "forsure is false - rooms" << ENDL;
@@ -562,28 +575,44 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 		COUT << ENDL;
 }
 
-void solver(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms) {
+bool solver(MAP<STRING, int> & master) {
 
 	//First possible way to solve:
-	int notFound = 0; // if this equals exactly 3 then the solution was found
-	int iter = 0;
-/*	for (iter = 0; iter < master.size(), iter++) {
-		if master.at(iter) {
-			if (master.at(iter) == 0) {
-				notFound++;
+
+	int zeros = 0;		
+	MAP <STRING, int>::iterator i = master.begin();
+	int whichItem = 0;
+	STRING person;
+	STRING weapon;
+	STRING room;
+
+
+	while (i != master.end()) {
+		if (i->second == 0)	 {
+			zeros++;	
+			if (whichItem == 0) { //people
+				person = i->first;
 			}
-		}
-	}
-	if (notFound == 3) {
-		COUT << "Solved! Here is the solution: ";
-		for (iter = 0; iter < master.size(), iter++) {
-		if master.at(iter) {
-			if (master.at(iter) == 0) {
-				COUT << master.at(iter);
+			else if (whichItem == 1) { //weapons
+				weapon = i->first;
 			}
+			else { //rooms
+				room = i->first;
+			}
+			whichItem++;
 		}
+		i++;		
 	}
 
+	if (zeros == 3) {
+		COUT << "Game is solvable!!!!!!!!\n";
+		COUT << "It was " << person << " with the " << weapon << "in the " << room << "! dun dun DUNNNNN\n";
+		return true;
+	}	
+	else {
+		COUT << "Puzzle not currently solvable. :( \n";
+		return false;
 	}
-	
+
+
 }
