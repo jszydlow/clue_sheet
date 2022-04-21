@@ -348,14 +348,14 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 		bool tryagain = true;
 		bool retry = true;
 
-		while (tryagain)
+	while (tryagain)
 		COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
 			for (int iter = 0; iter < player_count; iter++) {
 				COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
 			}
 		CIN >> personInt;
 		if (personInt < 0 || personInt > player_count) {
-			tryagain = true;
+			tryagain  = true;
 		} else {
 			tryagain = false;
 		}
@@ -756,22 +756,22 @@ bool solver(MAP<STRING, int> & master) {
 	int zeros = 0;		
 	MAP <STRING, int>::iterator i = master.begin();
 	int whichItem = 0;
-	STRING person;
-	STRING weapon;
-	STRING room;
+	STRING cardOne;
+	STRING cardTwo;
+	STRING cardThree;
 
 
 	while (i != master.end()) {
 		if (i->second == 0)	 {
 			zeros++;	
-			if (whichItem == 0) { //people
-				person = i->first;
+			if (whichItem == 0) { 
+				cardOne  = i->first;
 			}
-			else if (whichItem == 1) { //weapons
-				weapon = i->first;
+			else if (whichItem == 1) { 
+				cardTwo = i->first;
 			}
-			else { //rooms
-				room = i->first;
+			else { 
+				cardThree = i->first;
 			}
 			whichItem++;
 		}
@@ -780,7 +780,7 @@ bool solver(MAP<STRING, int> & master) {
 
 	if (zeros == 3) {
 		COUT << "Game is solvable!!!!!!!!\n";
-		COUT << "It was " << person << " with the " << weapon << "in the " << room << "! dun dun DUNNNNN\n";
+		COUT << "The correct cards are " << cardOne << ", " << cardTwo << ", and " << cardThree << "! dun dun DUNNNNN\n";
 		return true;
 	}	
 	else {

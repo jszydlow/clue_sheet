@@ -58,7 +58,7 @@ typedef struct Player {
 									{"HALL", 0},
 									{"BALLROOM", 0},
 									{"CONSERVATORY", 0},
-									{"DINIG ROOM", 0},
+									{"DINING ROOM", 0},
 									{"CELLAR", 0},
 									{"BILLIARD ROOM", 0},
 									{"LIBRARY", 0},
