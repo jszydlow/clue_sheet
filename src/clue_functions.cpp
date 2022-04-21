@@ -102,8 +102,8 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 
 
 	for (int iter = 0; iter < cards_per_player; iter++) {
-		bool tryagain = true;
-		bool retry = true;
+		bool tryagain = true; //error check for type of item
+		bool retry = true; //error check for item name
 		
 		while(tryagain) {
 			COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
@@ -336,7 +336,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
 	int personInt;
-	int categoryInt;
+	int categoryInt = -1;
 	MAP <STRING, int>::iterator i;
 	STRING item;
 	bool forsure = false; //if the user is positive about their info, then this will become true
@@ -345,198 +345,210 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 	bool keepgoing = true;
 
   	while (keepgoing) {
-		bool tryagain = true;
-		bool retry = true;
+		bool tryagain = true; //error check for player number
+		bool retry = true; //error check for item name
+		bool redo = true; //error check for category number
 
-	while (tryagain) {
-			COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
-				for (int iter = 0; iter < player_count; iter++) {
-					COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+		while (tryagain) {
+				COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
+					for (int iter = 0; iter < player_count; iter++) {
+						COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+					}
+				CIN >> personInt;
+				if (personInt < 0 || personInt > player_count) {
+					tryagain = true;
+					COUT << "--> Incorrect input -- please try again.." << ENDL;
+				} else {
+					tryagain = false;
+					break;
 				}
-			CIN >> personInt;
-			if (personInt < 0 || personInt > player_count) {
-				tryagain = true;
-				COUT << "--> Incorrect input -- please try again.." << ENDL;
-			} else {
-				tryagain = false;
-				break;
 			}
-		}
-		personInt--; //since c++ iterates starting from 0 but people don't
+			personInt--; //since c++ iterates starting from 0 but people don't
 
-		COUT << "Are you positive about the information you are about to update? (y/n) ";
-		GETLINE (CIN >> WS, posCheck); //this will help figure out if the value in the maps should be a 1 or 2 for the user's given value
+			COUT << "Are you positive about the information you are about to update? (y/n) ";
+			GETLINE (CIN >> WS, posCheck); //this will help figure out if the value in the maps should be a 1 or 2 for the user's given value
 
-		if (posCheck == "y") {
-			forsure = true;
-			COUT << "Fantastic! Let's update.." << ENDL;
-		} else if (posCheck == "n") {
-			forsure = false;
-			COUT << "Ok, let's update your \"maybe's\"!" << ENDL;
-		}
+			if (posCheck == "y") {
+				forsure = true;
+				COUT << "Fantastic! Let's update.." << ENDL;
+			} else if (posCheck == "n") {
+				forsure = false;
+				COUT << "Ok, let's update your \"maybe's\"!" << ENDL;
+			}
 
-		COUT << ENDL << "Which category would you like to update? Please enter a number." << ENDL;
-		COUT << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-		CIN >> categoryInt;
+			while(redo) {
 
+				COUT << ENDL << "Which category would you like to update? Please enter a number." << ENDL;
+				COUT << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+				CIN >> categoryInt;
 
-		COUT << "Please input the item name: ";
-
-		switch(categoryInt) {
-			case 1: //Characters
-				while(retry) { //error check
-					GETLINE(CIN >> WS, item);
-					toUpper(item);
-
-					if (!errorCheck( players, item, categoryInt)) {
+				if (categoryInt < 1 || categoryInt > 3) { //error check
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
-						COUT << "Please input the item name: ";
-						retry = true;
+						redo = true;
 					} else {
-						retry = false;
+						redo = false;
 						break;
 					}
+
 				}
 
-				if (forsure) {
+			COUT << "Please input the item name: ";
 
-					i = players[personInt].characters.find(item); //update the specified player's map
+			switch(categoryInt) {
+				case 1: //Characters
+					while(retry) { //error check
+						GETLINE(CIN >> WS, item);
+						toUpper(item);
 
-					if (i != players[personInt].characters.end()) {
-						i->second = 1;
-					}
-			
-					for (int jter = 0; jter < player_count; jter++) { //since the user is positive, set all the other players' cards to 3 (def don't have)
-						i = players[jter].characters.find(item);
-						if (jter == personInt) { continue; }
-						if (i != players[jter].characters.end()) {
-							i->second = 3;
-						}
-					}
-			
-					i = master.find(item); //iterate through and update the master list since we have a definite (1) value
-
-					if (i != master.end()) { 
-						i->second = 1; 
-						players[personInt].num_knowns++; //increment that that player has another known card
-					}
-
-				} else {
-					i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
-
-					if (i != players[personInt].characters.end()) { 
-						i->second = 2; 
-					}
-				}
-
-				break;
-
-			case 2: //Weapons
-				while(retry) { //error check
-					GETLINE(CIN >> WS, item);
-					toUpper(item);
-
-					if (!errorCheck( players, item, categoryInt)) {
-						COUT << "--> Incorrect input -- please try again.." << ENDL;
-						COUT << "Please input the item name: ";
-						retry = true;
-					} else {
-						retry = false;
-						break;
-					}
-				}
-
-				if (forsure) {
-
-					i = players[personInt].weapons.find(item);
-
-					if (i != players[personInt].weapons.end()) {
-						i->second = 1;
-					}
-
-					for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
-						i = players[jter].weapons.find(item);
-						if (jter == personInt) { continue; }
-						if (i != players[jter].weapons.end()) {
-							i->second = 3;
+						if (!errorCheck( players, item, categoryInt)) {
+							COUT << "--> Incorrect input -- please try again.." << ENDL;
+							COUT << "Please input the item name: ";
+							retry = true;
+						} else {
+							retry = false;
+							break;
 						}
 					}
 
-					i = master.find(item);
+					if (forsure) {
 
-					if (i != master.end()) { 
-						i->second = 1; 
-						players[personInt].num_knowns++; //increment that that player has another known card
-					}
+						i = players[personInt].characters.find(item); //update the specified player's map
 
-				} else {
-					i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
-					
-					if (i != players[personInt].weapons.end()) { 
-						i->second = 2; 
-					}
+						if (i != players[personInt].characters.end()) {
+							i->second = 1;
+						}
 				
-				}
+						for (int jter = 0; jter < player_count; jter++) { //since the user is positive, set all the other players' cards to 3 (def don't have)
+							i = players[jter].characters.find(item);
+							if (jter == personInt) { continue; }
+							if (i != players[jter].characters.end()) {
+								i->second = 3;
+							}
+						}
+				
+						i = master.find(item); //iterate through and update the master list since we have a definite (1) value
 
-				break;
+						if (i != master.end()) { 
+							i->second = 1; 
+							players[personInt].num_knowns++; //increment that that player has another known card
+						}
 
-			case 3: //Rooms
-				while(retry) { //error check
-					GETLINE(CIN >> WS, item);
-					toUpper(item);
-
-					if (!errorCheck( players, item, categoryInt)) {
-						COUT << "--> Incorrect input -- please try again.." << ENDL;
-						COUT << "Please input the item name: ";
-						retry = true;
 					} else {
-						retry = false;
-						break;
-					}
-				}
+						i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
 
-				if (forsure) {
-
-					i = players[personInt].rooms.find(item);
-
-					if (i != players[personInt].rooms.end()) {
-						i->second = 1;
-					}
-
-					for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
-						i = players[jter].rooms.find(item);
-						if (jter == personInt) { continue; }
-						if (i != players[jter].rooms.end()) {
-							i->second = 3;
+						if (i != players[personInt].characters.end()) { 
+							i->second = 2; 
 						}
 					}
 
-					i = master.find(item);
+					break;
 
-					if (i != master.end()) { 
-						i->second = 1; 
-						players[personInt].num_knowns++; //increment that that player has another known card
+				case 2: //Weapons
+					while(retry) { //error check
+						GETLINE(CIN >> WS, item);
+						toUpper(item);
+
+						if (!errorCheck( players, item, categoryInt)) {
+							COUT << "--> Incorrect input -- please try again.." << ENDL;
+							COUT << "Please input the item name: ";
+							retry = true;
+						} else {
+							retry = false;
+							break;
+						}
 					}
 
-				} else {
-					i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
+					if (forsure) {
 
-					if (i != players[personInt].rooms.end()) { 
-						i->second = 2; 
-					}
+						i = players[personInt].weapons.find(item);
+
+						if (i != players[personInt].weapons.end()) {
+							i->second = 1;
+						}
+
+						for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+							i = players[jter].weapons.find(item);
+							if (jter == personInt) { continue; }
+							if (i != players[jter].weapons.end()) {
+								i->second = 3;
+							}
+						}
+
+						i = master.find(item);
+
+						if (i != master.end()) { 
+							i->second = 1; 
+							players[personInt].num_knowns++; //increment that that player has another known card
+						}
+
+					} else {
+						i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
+						
+						if (i != players[personInt].weapons.end()) { 
+							i->second = 2; 
+						}
 					
-				}
+					}
 
-				break;
+					break;
+
+				case 3: //Rooms
+					while(retry) { //error check
+						GETLINE(CIN >> WS, item);
+						toUpper(item);
+
+						if (!errorCheck( players, item, categoryInt)) {
+							COUT << "--> Incorrect input -- please try again.." << ENDL;
+							COUT << "Please input the item name: ";
+							retry = true;
+						} else {
+							retry = false;
+							break;
+						}
+					}
+
+					if (forsure) {
+
+						i = players[personInt].rooms.find(item);
+
+						if (i != players[personInt].rooms.end()) {
+							i->second = 1;
+						}
+
+						for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+							i = players[jter].rooms.find(item);
+							if (jter == personInt) { continue; }
+							if (i != players[jter].rooms.end()) {
+								i->second = 3;
+							}
+						}
+
+						i = master.find(item);
+
+						if (i != master.end()) { 
+							i->second = 1; 
+							players[personInt].num_knowns++; //increment that that player has another known card
+						}
+
+					} else {
+						i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
+
+						if (i != players[personInt].rooms.end()) { 
+							i->second = 2; 
+						}
+						
+					}
+
+					break;
+			}
+
+		COUT << ENDL << "Would you like to update again? (y/n) ";
+		GETLINE (CIN >> WS, continueCheck);
+		if (continueCheck == "n") {
+			keepgoing = false;
+			break;
 		}
-
-	COUT << ENDL << "Would you like to update again? (y/n) ";
-	GETLINE (CIN >> WS, continueCheck);
-	if (continueCheck == "n") {
-		keepgoing = false;
-		break;
 	}
-  }
 	
 }
 
