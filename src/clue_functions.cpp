@@ -87,7 +87,7 @@ int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRIN
 
 	}
 
-	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name (case sensitive)." << ENDL;	
+	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name." << ENDL;	
 
 	input_user_cards(players, cards_per_player, player_count, master);
 	
@@ -110,7 +110,7 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 			CIN >> type;
 
 			if (type < 1 || type > 3) { //error check
-				COUT << "Incorrect input - please try again.." << ENDL;
+				COUT << "--> Incorrect input -- please try again.." << ENDL;
 				tryagain = true;
 			} else {
 				tryagain = false;
@@ -127,7 +127,7 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					toUpper(item);
 
 					if (!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -157,7 +157,7 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					toUpper(item);
 
 					if (!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -187,7 +187,7 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					toUpper(item);
 
 					if (!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -229,7 +229,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 	int type;
 	STRING item;
 
-	COUT << "First, you will input the cards in the middle. You will first indicate the type of item, and then enter the item name (case sensitive)." << ENDL;
+	COUT << "First, you will input the cards in the middle. You will first indicate the type of item, and then enter the item name." << ENDL;
 
 	for (int iter = 0; iter < extra_cards; iter++) {
 		bool tryagain = true;
@@ -240,7 +240,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 			CIN >> type;
 
 			if (type < 1 || type > 3) {
-				COUT << "Incorrect input - please try again.." << ENDL;
+				COUT << "--> Incorrect input -- please try again.." << ENDL;
 				tryagain = true;
 			} else {
 				tryagain = false;
@@ -256,7 +256,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 					toUpper(item);
 
 					if (!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -280,7 +280,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 					toUpper(item);
 
 					if (!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -304,7 +304,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 					toUpper(item);
 
 					if(!errorCheck( players, item, type)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -348,16 +348,19 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 		bool tryagain = true;
 		bool retry = true;
 
-	while (tryagain)
-		COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
-			for (int iter = 0; iter < player_count; iter++) {
-				COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+	while (tryagain) {
+			COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
+				for (int iter = 0; iter < player_count; iter++) {
+					COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
+				}
+			CIN >> personInt;
+			if (personInt < 0 || personInt > player_count) {
+				tryagain = true;
+				COUT << "--> Incorrect input -- please try again.." << ENDL;
+			} else {
+				tryagain = false;
+				break;
 			}
-		CIN >> personInt;
-		if (personInt < 0 || personInt > player_count) {
-			tryagain  = true;
-		} else {
-			tryagain = false;
 		}
 		personInt--; //since c++ iterates starting from 0 but people don't
 
@@ -386,7 +389,7 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					toUpper(item);
 
 					if (!errorCheck( players, item, categoryInt)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -434,7 +437,7 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					toUpper(item);
 
 					if (!errorCheck( players, item, categoryInt)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
@@ -483,7 +486,7 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					toUpper(item);
 
 					if (!errorCheck( players, item, categoryInt)) {
-						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
 						retry = true;
 					} else {
