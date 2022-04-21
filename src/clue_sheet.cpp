@@ -13,35 +13,35 @@ int main( ){
 	int player_count = introduction();
 	
 	VECTOR<Player> players(player_count);
-	MAP<STRING, int> master = {		{"Miss Scarlet", 0},
-									{"Colonel Mustard", 0},
-									{"Mrs. White", 0},
-									{"Mr. Green", 0},
-									{"Mrs. Peacock", 0},
-									{"Professor Plum", 0},
+	MAP<STRING, int> master = {		{"MISS SCARLET", 0},
+									{"COLONEL MUSTARD", 0},
+									{"MRS. WHITE", 0},
+									{"MR. GREEN", 0},
+									{"MRS. PEACOCK", 0},
+									{"PROFESSOR PLUM", 0},
 	
-								 	{"Revolver", 0},
-									{"Knife", 0},
-									{"Lead Pipe", 0},
-									{"Rope", 0},
-									{"Candlestick", 0},
-									{"Wrench", 0},
+								 	{"REVOLVER", 0},
+									{"KNIFE", 0},
+									{"LEAD PIPE", 0},
+									{"ROPE", 0},
+									{"CANDLESTICK", 0},
+									{"WRENCH", 0},
 
-									{"Kitchen", 0},
-									{"Hall", 0},
-									{"Ballroom", 0},
-									{"Conservatory", 0},
-									{"Dining Room", 0},
-									{"Cellar", 0},
-									{"Billiard Room", 0},
-									{"Library", 0},
-									{"Lounge", 0},
-									{"Study", 0}};
+									{"KITCHEN", 0},
+									{"HALL", 0},
+									{"BALLROOM", 0},
+									{"CONSERVATORY", 0},
+									{"DINIG ROOM", 0},
+									{"CELLAR", 0},
+									{"BILLIARD ROOM", 0},
+									{"LIBRARY", 0},
+									{"LOUNGE", 0},
+									{"STUDY", 0}};
 
 //create arrays for each category - makes it easier to access for printing purposes
-	VECTOR<STRING> thecharacters{"Miss Scarlet", "Colonel Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Professor Plum"};
-	VECTOR<STRING> theweapons{"Revolver", "Knife", "Lead Pipe", "Rope", "Candlestick", "Wrench"};
-	VECTOR<STRING> therooms{"Kitchen", "Hall", "Ballroom", "Conservatory", "Dining Room", "Cellar", "Billiard Room", "Library", "Lounge", "Study"};
+	VECTOR<STRING> thecharacters{"MISS SCARLET", "COLONEL MUSTARD", "MRS. WHITE", "MR. GREEN", "MRS. PEACOCK", "PROFESSOR PLUM"};
+	VECTOR<STRING> theweapons{"REVOLVER", "KNIFE", "LEAD PIPE", "ROPE", "CANDLESTICK", "WRENCH"};
+	VECTOR<STRING> therooms{"KITCHEN", "HALL", "BALLROOM", "CONSERVATORY", "DINIG ROOM", "CELLAR", "BILLIARD ROOM", "LIBRARY", "LOUNGE", "STUDY"};
 
 
 	build_players_array(players, player_count);

@@ -19,16 +19,53 @@ int introduction() {
 
 }
 
+void toUpper(STRING &word) {
+
+	for (auto & c: word) c = (char) toupper(c);
+}
+
+bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt) { //runs through a player list and compares the input to the items 
+	toUpper(item);
+
+	if (categoryInt == 1) {
+		for (auto &i : players[0].characters) {
+			if (i.first == item) {
+				return true;	// if the item matches an item in the list, then the input is valid
+			}
+		}
+	}
+
+	else if (categoryInt == 2) {
+		for (auto &i : players[0].weapons) {
+			if (i.first == item) {
+				return true;
+			}
+		}
+	}
+
+	else if (categoryInt == 3) {
+		for (auto &i : players[0].rooms) {
+			if (i.first == item) {
+				return true;
+			}
+		}
+	}
+
+	return false; //otherwise the input is not valid --> ask the user to try again
+}
+
 void  build_players_array(VECTOR<Player> & players, int player_count) {
 
 	COUT << "Please input your name: ";
 
 	CIN >> players[0].player_name;
+	toUpper(players[0].player_name);
 	players[0].num_knowns = 0; //set your amount of known cards to zero
 
 	for (int iter = 1; iter < player_count; iter++) {
 		COUT << "Please input the name of the next player: ";
 		CIN >> players[iter].player_name;
+		toUpper(players[iter].player_name);
 		players[iter].num_knowns = 0;//set this player instance's number of known cards
 	}
 
@@ -65,15 +102,39 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 
 
 	for (int iter = 0; iter < cards_per_player; iter++) {
+		bool tryagain = true;
+		bool retry = true;
 		
-		COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-		CIN >> type;
+		while(tryagain) {
+			COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+			CIN >> type;
+
+			if (type < 1 || type > 3) { //error check
+				COUT << "Incorrect input - please try again.." << ENDL;
+				tryagain = true;
+			} else {
+				tryagain = false;
+				break;
+			}
+		}
 
 		COUT << "Please input the item name: ";
 
 		switch(type) {
 			case 1:
-				GETLINE(CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
+					}
+				}
 
 				i = players[0].characters.find(item);
 
@@ -91,25 +152,49 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 				break;
 
 			case 2:
-				GETLINE(CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
 
-				i = players[0].weapons.find(item);
-
-				if (i != players[0].weapons.end()) {
-					i->second = 1;
-				}
-
-				for (int jter = 1; jter < player_count; jter++) {
-					i = players[jter].weapons.find(item);
-					if (i != players[jter].weapons.end()) {
-						i->second = 3;
+					if (!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
 					}
 				}
+
+					i = players[0].weapons.find(item);
+
+					if (i != players[0].weapons.end()) {
+						i->second = 1;
+					}
+
+					for (int jter = 1; jter < player_count; jter++) {
+						i = players[jter].weapons.find(item);
+						if (i != players[jter].weapons.end()) {
+							i->second = 3;
+						}
+					}
 
 				break;
 
 			case 3:
-				GETLINE (CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
+					}
+				}
 
 				i = players[0].rooms.find(item);
 
@@ -147,45 +232,93 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 	COUT << "First, you will input the cards in the middle. You will first indicate the type of item, and then enter the item name (case sensitive)." << ENDL;
 
 	for (int iter = 0; iter < extra_cards; iter++) {
-		COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-		CIN >> type; //input the type of category
+		bool tryagain = true;
+		bool retry = true;
+
+		while(tryagain) {
+			COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+			CIN >> type;
+
+			if (type < 1 || type > 3) {
+				COUT << "Incorrect input - please try again.." << ENDL;
+				tryagain = true;
+			} else {
+				tryagain = false;
+			}
+		}
 
 		COUT << "Please input the item name: ";
 
 		switch(type) {
 			case 1:
-				GETLINE(CIN >> WS, item);
-				
-				for (int jter = 0; jter < player_count; jter++) { //loops through the players
-					i = players[jter].characters.find(item); //say you're searching for Miss Scarlet .. i.e. player[0]-Mr.Green-Miss Scarlet?
-					if (i != players[jter].characters.end()) {
-						i->second = 3;
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
 					}
 				}
+				
+					for (int jter = 0; jter < player_count; jter++) { //loops through the players
+						i = players[jter].characters.find(item); //say you're searching for Miss Scarlet .. i.e. player[0]-Mr.Green-Miss Scarlet?
+						if (i != players[jter].characters.end()) {
+							i->second = 3;
+						}
+					}
 
 				break;
 
 			case 2:
-				GETLINE(CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
 
-				for (int jter = 0; jter < player_count; jter++) {
-					i = players[jter].weapons.find(item);
-					if (i != players[jter].weapons.end()) {
-						i->second = 3;
+					if (!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
 					}
 				}
+
+					for (int jter = 0; jter < player_count; jter++) {
+						i = players[jter].weapons.find(item);
+						if (i != players[jter].weapons.end()) {
+							i->second = 3;
+						}
+					}
 
 				break;
 
 			case 3:
-				GETLINE (CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
 
-				for (int jter = 0; jter < player_count; jter++) {
-					i = players[jter].rooms.find(item);
-					if (i != players[jter].rooms.end()) {
-						i->second = 3;
+					if(!errorCheck( players, item, type)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
 					}
 				}
+
+					for (int jter = 0; jter < player_count; jter++) {
+						i = players[jter].rooms.find(item);
+						if (i != players[jter].rooms.end()) {
+							i->second = 3;
+						}
+					}
 
 				break;
 		}
@@ -212,12 +345,20 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 	bool keepgoing = true;
 
   	while (keepgoing) {
+		bool tryagain = true;
+		bool retry = true;
 
+		while (tryagain)
 		COUT << ENDL << "Which player information would you like to update? Please enter a number." << ENDL;
 			for (int iter = 0; iter < player_count; iter++) {
 				COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
 			}
 		CIN >> personInt;
+		if (personInt < 0 || personInt > player_count) {
+			tryagain = true;
+		} else {
+			tryagain = false;
+		}
 		personInt--; //since c++ iterates starting from 0 but people don't
 
 		COUT << "Are you positive about the information you are about to update? (y/n) ";
@@ -240,7 +381,19 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 
 		switch(categoryInt) {
 			case 1: //Characters
-				GETLINE (CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, categoryInt)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
+					}
+				}
 
 				if (forsure) {
 
@@ -266,7 +419,6 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					}
 
 				} else {
-					COUT << "forsure is false - chars" << ENDL;
 					i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
 
 					if (i != players[personInt].characters.end()) { 
@@ -277,7 +429,19 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 				break;
 
 			case 2: //Weapons
-				GETLINE (CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, categoryInt)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
+					}
+				}
 
 				if (forsure) {
 
@@ -303,7 +467,6 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					}
 
 				} else {
-					COUT << "forsure is false - weapons" << ENDL;
 					i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
 					
 					if (i != players[personInt].weapons.end()) { 
@@ -315,7 +478,19 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 				break;
 
 			case 3: //Rooms
-				GETLINE (CIN >> WS, item);
+				while(retry) { //error check
+					GETLINE(CIN >> WS, item);
+					toUpper(item);
+
+					if (!errorCheck( players, item, categoryInt)) {
+						COUT << "Incorrect input - please try again.." << ENDL;
+						COUT << "Please input the item name: ";
+						retry = true;
+					} else {
+						retry = false;
+						break;
+					}
+				}
 
 				if (forsure) {
 
@@ -341,7 +516,6 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					}
 
 				} else {
-					COUT << "forsure is false - rooms" << ENDL;
 					i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
 
 					if (i != players[personInt].rooms.end()) { 
@@ -390,7 +564,7 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 	COUT << ENDL;
 
-	COUT << "CHARACTERS:" << ENDL;
+	COUT << "Characters:" << ENDL;
 	for (int jter = 0; jter <= 11; jter++) { COUT << "-"; }
 	COUT << ENDL;
 
@@ -408,7 +582,7 @@ void print_player(VECTOR<Player> & players, int num) {
 
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 
-	COUT << ENDL << "WEAPONS:" << ENDL;
+	COUT << ENDL << "Weapons:" << ENDL;
 	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; }
 	COUT << ENDL;
 
@@ -426,7 +600,7 @@ void print_player(VECTOR<Player> & players, int num) {
 
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 
-	COUT << ENDL << "ROOMS:" << ENDL;
+	COUT << ENDL << "Rooms:" << ENDL;
 	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; }
 	COUT << ENDL;
 
@@ -489,7 +663,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					}
 				}
 				if (!playersHand && inMiddle) {
-					COUT << "\t--> In the middle" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
+					COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
 				}
 			}
 		}
@@ -527,7 +701,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					}
 				}
 				if (!playersHand && inMiddle) {
-					COUT << "\t--> In the middle" << ENDL;
+					COUT << "\t--> Extra card" << ENDL;
 				}
 			}
 		}
@@ -565,7 +739,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					}
 				}
 				if (!playersHand && inMiddle) {
-					COUT << "\t--> In the middle" << ENDL;
+					COUT << "\t--> Extra card" << ENDL;
 				}
 			}
 		}

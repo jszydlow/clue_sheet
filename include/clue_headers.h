@@ -40,33 +40,35 @@ typedef struct Player {
 
 	STRING player_name;
 	int num_knowns;
-	MAP <STRING, int> characters = {{"Miss Scarlet", 0},
-									{"Colonel Mustard", 0},
-									{"Mrs. White", 0},
-									{"Mr. Green", 0},
-									{"Mrs. Peacock", 0},
-									{"Professor Plum", 0}};
+	MAP <STRING, int> characters = {{"MISS SCARLET", 0},
+									{"COLONEL MUSTARD", 0},
+									{"MRS. WHITE", 0},
+									{"MR. GREEN", 0},
+									{"MRS. PEACOCK", 0},
+									{"PROFESSOR PLUM", 0}};
 	
-	MAP <STRING, int> weapons = { 	{"Revolver", 0},
-									{"Knife", 0},
-									{"Lead Pipe", 0},
-									{"Rope", 0},
-									{"Candlestick", 0},
-									{"Wrench", 0}};
+	MAP <STRING, int> weapons = { 	{"REVOLVER", 0},
+									{"KNIFE", 0},
+									{"LEAD PIPE", 0},
+									{"ROPE", 0},
+									{"CANDLESTICK", 0},
+									{"WRENCH", 0}};
 
-	MAP <STRING, int> rooms = {		{"Kitchen", 0},
-									{"Hall", 0},
-									{"Ballroom", 0},
-									{"Conservatory", 0},
-									{"Dining Room", 0},
-									{"Cellar", 0},
-									{"Billiard Room", 0},
-									{"Library", 0},
-									{"Lounge", 0},
-									{"Study", 0}};
+	MAP <STRING, int> rooms = {		{"KITCHEN", 0},
+									{"HALL", 0},
+									{"BALLROOM", 0},
+									{"CONSERVATORY", 0},
+									{"DINIG ROOM", 0},
+									{"CELLAR", 0},
+									{"BILLIARD ROOM", 0},
+									{"LIBRARY", 0},
+									{"LOUNGE", 0},
+									{"STUDY", 0}};
 } Player;
 
 int introduction();
+void toUpper(STRING &word);
+bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt);
 void build_players_array(VECTOR<Player> & players, int player_count);
 int update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master);
