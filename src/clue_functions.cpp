@@ -8,29 +8,32 @@
 
 #include "../include/clue_headers.h"
 
+//introduction function:
 int introduction() {
 
-	int player_count;
+	int player_count;	//integer to track the number of players
 
 	COUT << "Welcome to the Clue Helper!" << ENDL << "Please input a valid number of players (3-6): ";
 	CIN >> player_count;
 
-	return player_count;
+	return player_count;	//return number of players
 
 }
 
+//toUpper function:
 void toUpper(STRING &word) {
 
-	for (auto & c: word) c = (char) toupper(c);
+	for (auto & c: word) c = (char) toupper(c);	//converts string to uppercase
 }
 
+//errorCheck function:
 bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt) { //runs through a player list and compares the input to the items 
 	toUpper(item);
 
 	if (categoryInt == 1) {
 		for (auto &i : players[0].characters) {
 			if (i.first == item) {
-				return true;	// if the item matches an item in the list, then the input is valid
+				return true;	// if the item matches an item in characters, then the input is valid
 			}
 		}
 	}
@@ -38,7 +41,7 @@ bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt) { //run
 	else if (categoryInt == 2) {
 		for (auto &i : players[0].weapons) {
 			if (i.first == item) {
-				return true;
+				return true;	// if the item matches an item in weapons, then the input is valid
 			}
 		}
 	}
@@ -46,7 +49,7 @@ bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt) { //run
 	else if (categoryInt == 3) {
 		for (auto &i : players[0].rooms) {
 			if (i.first == item) {
-				return true;
+				return true;	// if the item matches an item in rooms, then the input is valid
 			}
 		}
 	}
@@ -54,19 +57,21 @@ bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt) { //run
 	return false; //otherwise the input is not valid --> ask the user to try again
 }
 
+//build_players_array function:
 void  build_players_array(VECTOR<Player> & players, int player_count) {
 
 	COUT << "Please input your name: ";
 
-	CIN >> players[0].player_name;
-	toUpper(players[0].player_name);
-	players[0].num_knowns = 0; //set your amount of known cards to zero
+	CIN >> players[0].player_name;		//takes in the name of the player
+	toUpper(players[0].player_name);	//converts string to uppercase
+	players[0].num_knowns = 0; 			//set your amount of known cards to zero
 
+	//for loop to input the strings of player names into the players vector
 	for (int iter = 1; iter < player_count; iter++) {
 		COUT << "Please input the name of the next player: ";
-		CIN >> players[iter].player_name;
-		toUpper(players[iter].player_name);
-		players[iter].num_knowns = 0;//set this player instance's number of known cards
+		CIN >> players[iter].player_name;	//takes in the name of the player
+		toUpper(players[iter].player_name);	//converts string to uppercase
+		players[iter].num_knowns = 0;		//set this player instance's number of known cards
 	}
 
 	COUT << ENDL;
@@ -74,42 +79,45 @@ void  build_players_array(VECTOR<Player> & players, int player_count) {
 	return;
 }
 
+//update_initial_knowns function:
 int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
 	
-	int cards_per_player = 19 / player_count;
-	int extra_cards = 19 % player_count;
+	int cards_per_player = 19 / player_count;	//determines the amount of cards each player has
+	int extra_cards = 19 % player_count;		//determines the amount of cards left over
 
-	players[0].num_knowns = cards_per_player;
+	players[0].num_knowns = cards_per_player;	//the player knows all of the cards for themself...
 
 	if (extra_cards != 0) {
 	
-		input_extra_cards(players, player_count, master);
+		input_extra_cards(players, player_count, master);	//inputs the extra cards if there are any
 
 	}
 
 	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name." << ENDL;	
 
-	input_user_cards(players, cards_per_player, player_count, master);
+	input_user_cards(players, cards_per_player, player_count, master);	//input_user_cards, inputs the cards the user has in their hand
 	
-	return cards_per_player;
+	return cards_per_player;	//returns the integer number of cards each player has
 }
 
+//input_user_cards function:
 void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master) {
 	
 	MAP <STRING, int>::iterator i;
 	int type;
 	STRING item;
 
-
+	//for loop to iterate through the number of cards the player has
 	for (int iter = 0; iter < cards_per_player; iter++) {
 		bool tryagain = true; //error check for type of item
 		bool retry = true; //error check for item name
 		
+		//while loop to check that the user inputs a valid type 
 		while(tryagain) {
 			COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
 			CIN >> type;
 
-			if (type < 1 || type > 3) { //error check
+			if (type < 1 || type > 3) { //error check for valid input
 				COUT << "--> Incorrect input -- please try again.." << ENDL;
 				tryagain = true;
 			} else {
@@ -120,12 +128,14 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 
 		COUT << "Please input the item name: ";
 
+		//switch statement to properly input the item into its respective data stucture
 		switch(type) {
 			case 1:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
+					//error checking
 					if (!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
@@ -136,12 +146,15 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					}
 				}
 
+				//locate the key in the map
 				i = players[0].characters.find(item);
 
+				//set the value of the key to 1
 				if (i != players[0].characters.end()) {
 					i->second = 1;
 				}
-
+			
+				//set the value of all other players' keys to 3
 				for (int jter = 1; jter < player_count; jter++) {
 					i = players[jter].characters.find(item);
 					if (i != players[jter].characters.end()) {
@@ -154,8 +167,9 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 			case 2:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
+					//error checking
 					if (!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
@@ -166,26 +180,30 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					}
 				}
 
-					i = players[0].weapons.find(item);
+				//locate the key in the map
+				i = players[0].weapons.find(item);
 
-					if (i != players[0].weapons.end()) {
-						i->second = 1;
-					}
+				//set the value of the key to 1
+				if (i != players[0].weapons.end()) {
+					i->second = 1;
+				}
 
-					for (int jter = 1; jter < player_count; jter++) {
-						i = players[jter].weapons.find(item);
-						if (i != players[jter].weapons.end()) {
-							i->second = 3;
-						}
+				//set the value of all other players' keys to 3
+				for (int jter = 1; jter < player_count; jter++) {
+					i = players[jter].weapons.find(item);
+					if (i != players[jter].weapons.end()) {
+						i->second = 3;
 					}
+				}
 
 				break;
 
 			case 3:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
+					//error checking
 					if (!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
 						COUT << "Please input the item name: ";
@@ -196,12 +214,15 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 					}
 				}
 
+				//locate the key in the map
 				i = players[0].rooms.find(item);
 
+				//set the value of the key to 1
 				if (i != players[0].rooms.end()) {
 					i->second = 1;
 				}
 
+				//set the value of all other players' keys to 3
 				for (int jter = 1; jter < player_count; jter++) {
 					i = players[jter].rooms.find(item);
 					if (i != players[jter].rooms.end()) {
@@ -212,6 +233,7 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 				break;
 		}
 	
+		//update the key in the master map to mark that it was found
 		i = master.find(item);
 
 		if (i != master.end()) {
@@ -224,22 +246,25 @@ void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player
 
 void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
 
-	int extra_cards = 19 % player_count;
+	int extra_cards = 19 % player_count;	//calculate the number of extra cards left over
 	MAP <STRING, int>::iterator i;
 	int type;
 	STRING item;
 
 	COUT << "First, you will input the cards in the middle. You will first indicate the type of item, and then enter the item name." << ENDL;
 
+	
+	//for loop to iterate through the number of cards in the middle
 	for (int iter = 0; iter < extra_cards; iter++) {
-		bool tryagain = true;
-		bool retry = true;
+		bool tryagain = true; //error check for type of item
+		bool retry = true; //error check for item name
 
+		//while loop to check that the user inputs a valid type 
 		while(tryagain) {
 			COUT << "What is the type of the item?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
 			CIN >> type;
 
-			if (type < 1 || type > 3) {
+			if (type < 1 || type > 3) {	//error check for valid input
 				COUT << "--> Incorrect input -- please try again.." << ENDL;
 				tryagain = true;
 			} else {
@@ -249,11 +274,12 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 
 		COUT << "Please input the item name: ";
 
+		//switch statement to properly input the item into its respective data stucture
 		switch(type) {
 			case 1:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
 					if (!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
@@ -264,20 +290,21 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 						break;
 					}
 				}
-				
-					for (int jter = 0; jter < player_count; jter++) { //loops through the players
-						i = players[jter].characters.find(item); //say you're searching for Miss Scarlet .. i.e. player[0]-Mr.Green-Miss Scarlet?
-						if (i != players[jter].characters.end()) {
-							i->second = 3;
-						}
+			
+				// for loop to mark all players as not having the item	
+				for (int jter = 0; jter < player_count; jter++) { //loops through the players
+					i = players[jter].characters.find(item); //say you're searching for Miss Scarlet .. i.e. player[0]-Mr.Green-Miss Scarlet?
+					if (i != players[jter].characters.end()) {
+						i->second = 3;
 					}
+				}
 
 				break;
 
 			case 2:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
 					if (!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
@@ -289,19 +316,20 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 					}
 				}
 
-					for (int jter = 0; jter < player_count; jter++) {
-						i = players[jter].weapons.find(item);
-						if (i != players[jter].weapons.end()) {
-							i->second = 3;
-						}
+				// for loop to mark all players as not having the item	
+				for (int jter = 0; jter < player_count; jter++) {
+					i = players[jter].weapons.find(item);
+					if (i != players[jter].weapons.end()) {
+						i->second = 3;
 					}
+				}
 
 				break;
 
 			case 3:
 				while(retry) { //error check
 					GETLINE(CIN >> WS, item);
-					toUpper(item);
+					toUpper(item);	//convert to uppercase
 
 					if(!errorCheck( players, item, type)) {
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
@@ -313,16 +341,18 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 					}
 				}
 
-					for (int jter = 0; jter < player_count; jter++) {
-						i = players[jter].rooms.find(item);
-						if (i != players[jter].rooms.end()) {
-							i->second = 3;
-						}
+				// for loop to mark all players as not having the item	
+				for (int jter = 0; jter < player_count; jter++) {
+					i = players[jter].rooms.find(item);
+					if (i != players[jter].rooms.end()) {
+						i->second = 3;
 					}
+				}
 
 				break;
 		}
 	
+		//update the key in the master map to mark that it was found
 		i = master.find(item);
 
 		if (i != master.end()) {
@@ -334,6 +364,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 	return;
 }
 
+//update_info function:
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
 	int personInt;
 	int categoryInt = -1;
@@ -552,6 +583,7 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 	
 }
 
+//print_menu function:
 int print_menu() {
 	int choice = 0;
 
@@ -569,6 +601,7 @@ int print_menu() {
 	
 }
 
+//print_player function:
 void print_player(VECTOR<Player> & players, int num) {
 	int iter;
 	num--; //reset to follow c++ iteration rules
@@ -636,6 +669,7 @@ void print_player(VECTOR<Player> & players, int num) {
 	COUT << ENDL;
 }
 
+//print_category function:
 void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num, int player_count, VECTOR<STRING> & thecharacters, VECTOR<STRING> & theweapons, VECTOR<STRING> & therooms) {
 	MAP<STRING, int>::iterator i;
 	COUT << ENDL;
@@ -764,41 +798,44 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 		COUT << ENDL;
 }
 
+//solver function:
 bool solver(MAP<STRING, int> & master) {
 
-	//First possible way to solve:
-
-	int zeros = 0;		
+	int zeros = 0;	//integer to count the number of 0s in the master
 	MAP <STRING, int>::iterator i = master.begin();
 	int whichItem = 0;
 	STRING cardOne;
 	STRING cardTwo;
 	STRING cardThree;
 
-
+	//iterate through the master list
+	//and count the 0s in the list with
+	//the "zeros" variable
 	while (i != master.end()) {
 		if (i->second == 0)	 {
 			zeros++;	
 			if (whichItem == 0) { 
-				cardOne  = i->first;
+				cardOne  = i->first;	//save the unknown card 
 			}
 			else if (whichItem == 1) { 
-				cardTwo = i->first;
+				cardTwo = i->first;		//save the unknown card
 			}
 			else { 
-				cardThree = i->first;
+				cardThree = i->first;	//save the unknown card
 			}
 			whichItem++;
 		}
 		i++;		
 	}
 
+	//if exactly three 0s were found... a solution has been found!
 	if (zeros == 3) {
 		COUT << "Game is solvable!!!!!!!!\n";
-		COUT << "The correct cards are " << cardOne << ", " << cardTwo << ", and " << cardThree << "! dun dun DUNNNNN\n";
+		COUT << "The correct cards are " << cardOne << ", " << cardTwo << ", and " << cardThree << "! dun dun DUNNNNN\n";	//print the solution
 		return true;
-	}	
-	else {
+	
+	//otherwise, a solution has not yet been found :(
+	} else {
 		COUT << "Puzzle not currently solvable. :( \n";
 		return false;
 	}
