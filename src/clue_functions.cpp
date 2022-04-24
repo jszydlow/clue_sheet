@@ -601,6 +601,106 @@ int print_menu() {
 	
 }
 
+//print the whole clue sheet
+void print_all(VECTOR<Player> & players, int player_count) {
+
+	// Explanation for each number in the clue sheet
+	COUT << ENDL;
+	COUT << "Explanation:" << ENDL;
+	COUT << "0: We do not have information" << ENDL;
+	COUT << "1: The current player has it" << ENDL;
+	COUT << "2: The player might have it" << ENDL;
+	COUT << "3: The player definitely does not have it" << ENDL << ENDL;
+
+	for (int i = 0; i < 50; i++) {
+		COUT << "-";
+	}
+
+	COUT << ENDL << "	";
+	for (int i = 0; i < player_count; i++) {
+		COUT << "	" <<  players[i].player_name;
+	}
+	COUT << ENDL;
+
+	for (int i = 0; i < 17; i++) 
+		COUT << "-- ";
+	COUT << ENDL;
+
+	// print the characters
+	COUT << "Characters:" << ENDL;
+	for (int i = 0; i < 10; i++) 
+		COUT << "-";
+	COUT << ENDL; 
+
+	for (auto j: players[0].characters) {
+		COUT << j.first << "	";
+		for (int i = 0; i < player_count; i++) {
+			for (auto k: players[i].characters) {
+				if (k.first == j.first) {
+					COUT << k.second << "	";
+				}
+			}
+		}	
+		COUT << ENDL;
+	}
+			
+	for (int i = 0; i < 17; i++) 
+		COUT << "-- ";
+	COUT << ENDL;
+
+	// Print the weapons
+	COUT << "Weapons:" << ENDL;
+	for (int i = 0; i < 7; i++) 
+		COUT << "-";
+	COUT << ENDL;
+
+	for (auto j: players[0].weapons) {
+		COUT << j.first << "	";
+		if (j.first.size() < 7) 
+			COUT <<  "	";
+		for (int i = 0; i < player_count; i++) {
+			for (auto k: players[i].weapons) {
+				if (k.first == j.first) {
+					COUT << k.second << "	";
+				
+				}
+			}
+		}	
+		COUT << ENDL;
+	}
+
+	for (int i = 0; i < 17; i++) 
+		COUT << "-- ";
+	COUT << ENDL;
+
+	// Print the Rooms
+	COUT << "Rooms:" << ENDL;
+	for (int i = 0; i < 7; i++) 
+		COUT << "-";
+	COUT << ENDL;
+
+	for (auto j: players[0].rooms) {
+		COUT << j.first << "	";
+		if (j.first.size() < 8) 
+			COUT <<  "	";
+		for (int i = 0; i < player_count; i++) {
+			for (auto k: players[i].rooms) {
+				if (k.first == j.first) {
+					COUT << k.second << "	";
+				
+				}
+			}
+		}	
+		COUT << ENDL;
+	}
+
+	for (int i = 0; i < 50; i++) {
+		COUT << "-";
+	}
+
+}
+
+
 //print_player function:
 void print_player(VECTOR<Player> & players, int num) {
 	int iter;

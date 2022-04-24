@@ -60,6 +60,7 @@ int main( ){
 
 		switch (choice) {
 			case 1: //print full clue sheet
+				print_all(players, player_count);
 				break;
 				
 			case 2: //print a player
