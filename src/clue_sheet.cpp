@@ -48,7 +48,7 @@ int main( ){
 
 	int cards_per_player = update_initial_knowns(players, player_count, master);
 
-	COUT << cards_per_player << ENDL; //this is just here to run without the unused parameter warning lol
+	//COUT << cards_per_player << ENDL; //this is just here to run without the unused parameter warning lol
 
 	bool retry = true; //error check for printing a category
 	bool tryagain = true; //error check for printing a player
@@ -110,7 +110,7 @@ int main( ){
 				break;
 
 			case 4: //update info
-				update_info(players, player_count, master);
+				update_info(players, player_count, master,cards_per_player);
 				break;
 
 			case 5: //check for solution

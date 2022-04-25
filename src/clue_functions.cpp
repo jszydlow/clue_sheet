@@ -365,7 +365,7 @@ void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, i
 }
 
 //update_info function:
-void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master) {
+void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master,int cards_per_player) {
 	int personInt;
 	int categoryInt = -1;
 	MAP <STRING, int>::iterator i;
@@ -462,6 +462,8 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 						if (i != master.end()) { 
 							i->second = 1; 
 							players[personInt].num_knowns++; //increment that that player has another known card
+							check_num_knowns(players,personInt,cards_per_player);	
+
 						}
 
 					} else {
@@ -510,6 +512,8 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 						if (i != master.end()) { 
 							i->second = 1; 
 							players[personInt].num_knowns++; //increment that that player has another known card
+							check_num_knowns(players,personInt,cards_per_player);	
+
 						}
 
 					} else {
@@ -558,7 +562,9 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 
 						if (i != master.end()) { 
 							i->second = 1; 
-							players[personInt].num_knowns++; //increment that that player has another known card
+							players[personInt].num_knowns++; //increment that that player has another known card 				
+							check_num_knowns(players,personInt,cards_per_player);	
+		
 						}
 
 					} else {
@@ -941,4 +947,29 @@ bool solver(MAP<STRING, int> & master) {
 	}
 
 
+}
+
+void check_num_knowns(VECTOR<Player> & players, int curr_player, int cards_per_player) {
+	if (players[curr_player].num_knowns >= cards_per_player) {//if we know for sure the player has the amount of cards they were dealt
+			COUT << "All cards for player " << curr_player << " have been found.Updating info to reflect...\n";
+			MAP <STRING, int>::iterator c = players[curr_player].characters.begin();
+			while (c != players[curr_player].characters.end()) {
+				if (c->second != 1) {
+					c->second = 3;
+				}
+			}
+			MAP <STRING, int>::iterator r = players[curr_player].rooms.begin();
+			while (r != players[curr_player].rooms.end()) {
+				if (r->second != 1) {
+					r->second = 3;
+				}
+			}
+			MAP <STRING, int>::iterator w = players[curr_player].weapons.begin();
+			while (w != players[curr_player].weapons.end()) {
+				if (w->second != 1) {
+					w->second = 3;
+				}
+			}
+
+	}
 }
