@@ -618,7 +618,7 @@ void print_all(VECTOR<Player> & players, int player_count) {
 	COUT << "2: The player might have it" << ENDL;
 	COUT << "3: The player definitely does not have it" << ENDL << ENDL;
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 60; i++) {
 		COUT << "-";
 	}
 
@@ -628,13 +628,13 @@ void print_all(VECTOR<Player> & players, int player_count) {
 	}
 	COUT << ENDL;
 
-	for (int i = 0; i < 17; i++) 
+	for (int i = 0; i < 20; i++) 
 		COUT << "-- ";
 	COUT << ENDL;
 
 	// print the characters
 	COUT << "Characters:" << ENDL;
-	for (int i = 0; i < 10; i++) 
+	for (int i = 0; i < 13; i++) 
 		COUT << "-";
 	COUT << ENDL; 
 
@@ -646,11 +646,13 @@ void print_all(VECTOR<Player> & players, int player_count) {
 					COUT << k.second << "	";
 				}
 			}
+			if (players[i].player_name.size() > 7) 
+				COUT << "	";
 		}	
 		COUT << ENDL;
 	}
 			
-	for (int i = 0; i < 17; i++) 
+	for (int i = 0; i < 20; i++) 
 		COUT << "-- ";
 	COUT << ENDL;
 
@@ -671,11 +673,13 @@ void print_all(VECTOR<Player> & players, int player_count) {
 				
 				}
 			}
+			if (players[i].player_name.size() > 7) 
+				COUT << "	";
 		}	
 		COUT << ENDL;
 	}
 
-	for (int i = 0; i < 17; i++) 
+	for (int i = 0; i < 20; i++) 
 		COUT << "-- ";
 	COUT << ENDL;
 
@@ -696,11 +700,13 @@ void print_all(VECTOR<Player> & players, int player_count) {
 				
 				}
 			}
+			if (players[i].player_name.size() > 7) 
+				COUT << "	";
 		}	
 		COUT << ENDL;
 	}
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 60; i++) {
 		COUT << "-";
 	}
 
