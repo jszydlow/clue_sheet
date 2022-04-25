@@ -6,6 +6,7 @@
  * File Contents: This file contains the function prototypes for the Cheers! Final Project
  ***************************************************************************************/
 
+//Libraries:
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -16,6 +17,7 @@
 #include <cstdio>
 #include <cstring>
 
+//Macros:
 #define COUT std::cout
 #define CIN std::cin
 #define ENDL std::endl
@@ -34,19 +36,22 @@
 #define TOTALROOMS 10
 #define TOTALITEMS 22
 
-//Function Prototypes:
 
+// Player Struct: Used to contain information about each player
 typedef struct Player {
 
-	STRING player_name;
-	int num_knowns;
+	STRING player_name;	//player's name (string)
+	int num_knowns;		//number of the player's cards the user knows
+
+	//Characters Map: Initialized to 0 
 	MAP <STRING, int> characters = {{"MISS SCARLET", 0},
 									{"COLONEL MUSTARD", 0},
 									{"MRS. WHITE", 0},
 									{"MR. GREEN", 0},
 									{"MRS. PEACOCK", 0},
 									{"PROFESSOR PLUM", 0}};
-	
+
+	//Weapons Map: Initialized to 0 
 	MAP <STRING, int> weapons = { 	{"REVOLVER", 0},
 									{"KNIFE", 0},
 									{"LEAD PIPE", 0},
@@ -54,6 +59,8 @@ typedef struct Player {
 									{"CANDLESTICK", 0},
 									{"WRENCH", 0}};
 
+
+	//Rooms Map: Initialized to 0 
 	MAP <STRING, int> rooms = {		{"KITCHEN", 0},
 									{"HALL", 0},
 									{"BALLROOM", 0},
@@ -66,6 +73,7 @@ typedef struct Player {
 									{"STUDY", 0}};
 } Player;
 
+// Function Prototypes:
 int introduction();
 void toUpper(STRING &word);
 bool errorCheck( VECTOR<Player> & players, STRING item, int categoryInt);
@@ -73,7 +81,6 @@ void build_players_array(VECTOR<Player> & players, int player_count);
 int update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
 void input_user_cards(VECTOR<Player> & players, int cards_per_player, int player_count, MAP<STRING, int> & master);
 void input_extra_cards(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master);
-
 void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & master, int cards_per_player);
 int print_menu();
 void print_all(VECTOR <Player> & players, int player_count);

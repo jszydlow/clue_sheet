@@ -579,10 +579,11 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 					break;
 			}
 
+		//asks if the user would like to continue updating
 		COUT << ENDL << "Would you like to update again? (y/n) ";
 		GETLINE (CIN >> WS, continueCheck);
 		if (continueCheck == "n") {
-			keepgoing = false;
+			keepgoing = false;	//if not, breaks from the loop
 			break;
 		}
 	}
@@ -593,6 +594,7 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 int print_menu() {
 	int choice = 0;
 
+	//displays the menu to the user
 	COUT << "Select the action you would like to perform.\n";
 	COUT << "1: Print full Clue Sheet.\n";
 	COUT << "2: Print a player.\n";
@@ -607,10 +609,11 @@ int print_menu() {
 	
 }
 
-//print the whole clue sheet
+//print_all function:
+//print the entire clue sheet with all known information about all players
 void print_all(VECTOR<Player> & players, int player_count) {
 
-	// Explanation for each number in the clue sheet
+	// Explanation/key for each number in the clue sheet
 	COUT << ENDL;
 	COUT << "Explanation:" << ENDL;
 	COUT << "0: We do not have information" << ENDL;
@@ -632,7 +635,7 @@ void print_all(VECTOR<Player> & players, int player_count) {
 		COUT << "-- ";
 	COUT << ENDL;
 
-	// print the characters
+	// print the Characters
 	COUT << "Characters:" << ENDL;
 	for (int i = 0; i < 13; i++) 
 		COUT << "-";
@@ -656,7 +659,7 @@ void print_all(VECTOR<Player> & players, int player_count) {
 		COUT << "-- ";
 	COUT << ENDL;
 
-	// Print the weapons
+	// Print the Weapons
 	COUT << "Weapons:" << ENDL;
 	for (int i = 0; i < 7; i++) 
 		COUT << "-";
@@ -724,6 +727,7 @@ void print_player(VECTOR<Player> & players, int num) {
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 	COUT << ENDL;
 
+	// display the characters information for the player
 	COUT << "Characters:" << ENDL;
 	for (int jter = 0; jter <= 11; jter++) { COUT << "-"; }
 	COUT << ENDL;
@@ -742,6 +746,7 @@ void print_player(VECTOR<Player> & players, int num) {
 
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 
+	//display the weapons information for the player
 	COUT << ENDL << "Weapons:" << ENDL;
 	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; }
 	COUT << ENDL;
@@ -760,6 +765,7 @@ void print_player(VECTOR<Player> & players, int num) {
 
 	for (iter = 0; iter < 15; iter++) { COUT << "- -"; }
 
+	//display the rooms information for the player
 	COUT << ENDL << "Rooms:" << ENDL;
 	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; }
 	COUT << ENDL;
@@ -832,21 +838,21 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 	
 	else if (num == 2) { //WEAPONS --> map #7-12
 
-	COUT << "WEAPONS:" << ENDL;
-	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; }
+	COUT << "WEAPONS:" << ENDL; //title
+	for (int jter = 0; jter <= 8; jter++) { COUT << "-"; } 
 	COUT << ENDL;
 
 		for (int iter = 0; iter < 6; iter++) {
 			COUT << theweapons[iter];
 			i = master.find(theweapons[iter]);
 
-			if (i != master.end() && i->second == 0) { //iterate through the master list
+			if (i != master.end() && i->second == 0) { //iterate through the master list to check for 0s
 				COUT << "\t " << ENDL;
 			} 
 			
 			else if (i != master.end() && i->second == 1) { //iterate through master to check for 1s
 				
-				for (int jter = 0; jter < player_count; jter++) {
+				for (int jter = 0; jter < player_count; jter++) { //if a 1 is found, iterate through all players and display which player has this card
 					for (auto x : players[jter].weapons) { 
 						if (i->first == x.first && x.second == 1) {
 							playersHand = true;
@@ -861,7 +867,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 						COUT << "\t--> " << players[jter].player_name << ENDL;
 					}
 				}
-				if (!playersHand && inMiddle) {
+				if (!playersHand && inMiddle) { //or if the card is unavailable but not with a player - display that it's in the middle
 					COUT << "\t--> Extra card" << ENDL;
 				}
 			}
@@ -870,21 +876,21 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 	
 	else if (num == 3) { //ROOMS --> map #13-22
 
-	COUT << "ROOMS:" << ENDL;
-	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; }
+	COUT << "ROOMS:" << ENDL; //title
+	for (int jter = 0; jter <= 6; jter++) { COUT << "-"; } 
 	COUT << ENDL;
 
 		for (int iter = 0; iter < 10; iter++) {
 			COUT << therooms[iter];
 			i = master.find(therooms[iter]);
 
-			if (i != master.end() && i->second == 0) { //iterate through the master list
+			if (i != master.end() && i->second == 0) { //iterate through the master list to check for 0s
 				COUT << "\t " << ENDL;
 			} 
 			
 			else if (i != master.end() && i->second == 1) { //iterate through master to check for 1s
 				
-				for (int jter = 0; jter < player_count; jter++) {
+				for (int jter = 0; jter < player_count; jter++) { //if a 1 is found, iterate through all players and display which player has this card
 					for (auto x : players[jter].rooms) { 
 						if (i->first == x.first && x.second == 1) {
 							playersHand = true;
@@ -899,7 +905,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 						COUT << "\t--> " << players[jter].player_name << ENDL;
 					}
 				}
-				if (!playersHand && inMiddle) {
+				if (!playersHand && inMiddle) { //or if the card is unavailable but not with a player - display that it's in the middle
 					COUT << "\t--> Extra card" << ENDL;
 				}
 			}
@@ -955,10 +961,15 @@ bool solver(MAP<STRING, int> & master) {
 
 }
 
+//check_num_knowns function:
 void check_num_knowns(VECTOR<Player> & players, int curr_player, int cards_per_player) {
-	if (players[curr_player].num_knowns >= cards_per_player) {//if we know for sure the player has the amount of cards they were dealt
+
+	if (players[curr_player].num_knowns >= cards_per_player) { //if we know what all of the cards are for a player...
 			COUT << "All cards for player " << curr_player << " have been found.Updating info to reflect...\n";
 			MAP <STRING, int>::iterator c = players[curr_player].characters.begin();
+		
+			//change all unknown info for the player to definitely does not have (3)
+			//for all 3 maps in the player struct
 			while (c != players[curr_player].characters.end()) {
 				if (c->second != 1) {
 					c->second = 3;

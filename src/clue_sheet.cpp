@@ -10,9 +10,12 @@
 
 int main( ){
 
-	int player_count = introduction();
+	int player_count = introduction();	//calls introduction function and obtains the number of players
 	
+	//intializes the players vector of Player structs (to the player_count)
 	VECTOR<Player> players(player_count);
+
+	//initializes the master map to store overarching information
 	MAP<STRING, int> master = {		{"MISS SCARLET", 0},
 									{"COLONEL MUSTARD", 0},
 									{"MRS. WHITE", 0},
@@ -38,25 +41,25 @@ int main( ){
 									{"LOUNGE", 0},
 									{"STUDY", 0}};
 
-//create arrays for each category - makes it easier to access for printing purposes
+	//create vectors for each category - makes it easier to access for printing purposes
 	VECTOR<STRING> thecharacters{"MISS SCARLET", "COLONEL MUSTARD", "MRS. WHITE", "MR. GREEN", "MRS. PEACOCK", "PROFESSOR PLUM"};
 	VECTOR<STRING> theweapons{"REVOLVER", "KNIFE", "LEAD PIPE", "ROPE", "CANDLESTICK", "WRENCH"};
 	VECTOR<STRING> therooms{"KITCHEN", "HALL", "BALLROOM", "CONSERVATORY", "DINING ROOM", "CELLAR", "BILLIARD ROOM", "LIBRARY", "LOUNGE", "STUDY"};
 
 
+	//calls build_players_array function to set up the vector of players
 	build_players_array(players, player_count);
 
+	//calls update_inital_knowns function and returns the number of cards each player has
 	int cards_per_player = update_initial_knowns(players, player_count, master);
-
-	//COUT << cards_per_player << ENDL; //this is just here to run without the unused parameter warning lol
 
 	bool retry = true; //error check for printing a category
 	bool tryagain = true; //error check for printing a player
 
-
-	while (1) { //i know this scares Bui but it's the best thing for this case haha
+	//main while loop to run the program
+	while (1) { 
 		COUT << ENDL;
-		int choice = print_menu();
+		int choice = print_menu();	//prints the menu of options to the user and returns their chosen action
 
 		switch (choice) {
 			case 1: //print full clue sheet
@@ -66,45 +69,44 @@ int main( ){
 			case 2: //print a player
 				int personInt;
 
-				while (tryagain) {
+				while (tryagain) {	//until a valid input is given, continues to ask user for input
 					COUT << ENDL << "Which player information would you like to print? (1 - " << player_count << ") : " << ENDL;
 						for (int iter = 0; iter < player_count; iter++) {
 							COUT << "(" << iter + 1 << ") " << players[iter].player_name << ENDL;
 						}
 					CIN >> personInt;
 
-					if (personInt < 0 || personInt > player_count) {
+					if (personInt < 0 || personInt > player_count) { //error check
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
 								tryagain = true;
 							} else {
-								tryagain = false;
+								tryagain = false; //valid input given, exits the loop
 								break;
 							}
 				}
 
-				print_player(players, personInt);
+				print_player(players, personInt);	//prints the known information about the player
 				tryagain = true;
 				break;
 
 			case 3: //print items in a category
 				int categoryInt;
 
-				while(retry) {
-
-				COUT << "Which category would you like to print?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
-				CIN >> categoryInt;
-				COUT << categoryInt;
-				
+				while(retry) {	//until a valid input is given, continues to ask user for input
+					COUT << "Which category would you like to print?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
+					CIN >> categoryInt;
+					COUT << categoryInt;
+					
 					if (categoryInt < 1 || categoryInt > 3) { //error check
-							COUT << "--> Incorrect input -- please try again.." << ENDL;
-							retry = true;
-						} else {
-							retry = false;
-							break;
-						}
+						COUT << "--> Incorrect input -- please try again.." << ENDL;
+						retry = true;
+					} else {
+						retry = false; //valid input given, exits the loop
+						break;
+					}
 				}
 
-				print_category(master, players, categoryInt, player_count, thecharacters, theweapons, therooms);
+				print_category(master, players, categoryInt, player_count, thecharacters, theweapons, therooms); //prints information about the chosen category
 				retry = true;
 
 				break;
