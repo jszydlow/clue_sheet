@@ -1024,18 +1024,21 @@ void check_num_knowns(VECTOR<Player> & players, int curr_player, int cards_per_p
 				if (c->second != 1) {
 					c->second = 3;
 				}
+				c++;
 			}
 			MAP <STRING, int>::iterator r = players[curr_player].rooms.begin();
 			while (r != players[curr_player].rooms.end()) {
 				if (r->second != 1) {
 					r->second = 3;
 				}
+				r++;
 			}
 			MAP <STRING, int>::iterator w = players[curr_player].weapons.begin();
 			while (w != players[curr_player].weapons.end()) {
 				if (w->second != 1) {
 					w->second = 3;
 				}
+				w++;
 			}
 
 	}
