@@ -96,6 +96,8 @@ int  update_initial_knowns(VECTOR<Player> & players, int player_count, MAP<STRIN
 	COUT << ENDL << "You will now input the cards in your hand. You will first indicate the type of item, and then enter the item name." << ENDL;	
 
 	input_user_cards(players, cards_per_player, player_count, master);	//input_user_cards, inputs the cards the user has in their hand
+
+	check_num_knowns(players, 0, cards_per_player)
 	
 	return cards_per_player;	//returns the integer number of cards each player has
 }
