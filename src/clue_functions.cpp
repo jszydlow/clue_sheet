@@ -880,6 +880,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					if (playersHand) {
 						COUT << "\t--> " << players[jter].player_name << ENDL;
 					}
+					if (!inMiddle) { break; }
 				}
 				if (!playersHand && inMiddle) {
 					COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
@@ -918,6 +919,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					if (playersHand) {
 						COUT << "\t--> " << players[jter].player_name << ENDL;
 					}
+					if (!inMiddle) { break; }
 				}
 				if (!playersHand && inMiddle) { //or if the card is unavailable but not with a player - display that it's in the middle
 					COUT << "\t--> Extra card" << ENDL;
@@ -956,6 +958,7 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 					if (playersHand) {
 						COUT << "\t--> " << players[jter].player_name << ENDL;
 					}
+					if (!inMiddle) { break; }
 				}
 				if (!playersHand && inMiddle) { //or if the card is unavailable but not with a player - display that it's in the middle
 					COUT << "\t--> Extra card" << ENDL;
