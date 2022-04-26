@@ -1015,7 +1015,7 @@ bool solver(MAP<STRING, int> & master) {
 void check_num_knowns(VECTOR<Player> & players, int curr_player, int cards_per_player) {
 
 	if (players[curr_player].num_knowns >= cards_per_player) { //if we know what all of the cards are for a player...
-			COUT << "All cards for player " << curr_player << " have been found.Updating info to reflect...\n";
+			COUT << "All cards for player " << curr_player + 1 << " have been found.Updating info to reflect...\n";
 			MAP <STRING, int>::iterator c = players[curr_player].characters.begin();
 		
 			//change all unknown info for the player to definitely does not have (3)
