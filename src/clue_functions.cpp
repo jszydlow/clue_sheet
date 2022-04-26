@@ -441,36 +441,54 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 						}
 					}
 
-					if (forsure) {
+					for (auto & checkmaster : master) { //iterate through the master list to check if the specified item
+						if (checkmaster.first == item && checkmaster.second == 0) { //has or has not already been placed
 
-						i = players[personInt].characters.find(item); //update the specified player's map
+							if (forsure) {
 
-						if (i != players[personInt].characters.end()) {
-							i->second = 1;
-						}
-				
-						for (int jter = 0; jter < player_count; jter++) { //since the user is positive, set all the other players' cards to 3 (def don't have)
-							i = players[jter].characters.find(item);
-							if (jter == personInt) { continue; }
-							if (i != players[jter].characters.end()) {
-								i->second = 3;
+								i = players[personInt].characters.find(item); //update the specified player's map
+
+								if (i != players[personInt].characters.end()) {
+									i->second = 1;
+								}
+						
+								for (int jter = 0; jter < player_count; jter++) { //since the user is positive, set all the other players' cards to 3 (def don't have)
+									i = players[jter].characters.find(item);
+									if (jter == personInt) { continue; }
+									if (i != players[jter].characters.end()) {
+										i->second = 3;
+									}
+								}
+						
+								i = master.find(item); //iterate through and update the master list since we have a definite (1) value
+
+								if (i != master.end()) { 
+									i->second = 1; 
+									players[personInt].num_knowns++; //increment that that player has another known card
+									check_num_knowns(players,personInt,cards_per_player);	
+
+								}
+
+							} else {
+								for (int it = 0; it < player_count; it++) {
+									for (auto playercheck : players[it].characters) { //check through all of the players to make sure that the specifed item has not already been placed
+										if ((playercheck.first == item && playercheck.second != 1) || (playercheck.first == item && playercheck.second != 3)) {
+											i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
+
+											if (i != players[personInt].characters.end()) { 
+											i->second = 2; 
+											}
+										} else if ((playercheck.first == item && playercheck.second == 1) || (playercheck.first == item && playercheck.second == 3)) {
+											COUT << "This card is already one of the extras or in a player's hand!" << ENDL; //if it has already been placed, this part of the function makes sure that the
+																															// previous info is not overwritten
+											break;
+										}
+									}
+								}
 							}
-						}
-				
-						i = master.find(item); //iterate through and update the master list since we have a definite (1) value
-
-						if (i != master.end()) { 
-							i->second = 1; 
-							players[personInt].num_knowns++; //increment that that player has another known card
-							check_num_knowns(players,personInt,cards_per_player);	
-
-						}
-
-					} else {
-						i = players[personInt].characters.find(item); //if it's just a maybe, then only update the specified player
-
-						if (i != players[personInt].characters.end()) { 
-							i->second = 2; 
+						} else if (checkmaster.first == item && checkmaster.second == 1) {
+							COUT << "This card is already one of the extras or in a player's hand!" << ENDL;
+							break;
 						}
 					}
 
@@ -491,38 +509,54 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 						}
 					}
 
-					if (forsure) {
+					for (auto & checkmaster : master) {
+						if (checkmaster.first == item && checkmaster.second == 0) {
 
-						i = players[personInt].weapons.find(item);
+							if (forsure) {
 
-						if (i != players[personInt].weapons.end()) {
-							i->second = 1;
+								i = players[personInt].weapons.find(item);
+
+								if (i != players[personInt].weapons.end()) {
+									i->second = 1;
+								}
+
+								for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+									i = players[jter].weapons.find(item);
+									if (jter == personInt) { continue; }
+									if (i != players[jter].weapons.end()) {
+										i->second = 3;
+									}
+								}
+
+								i = master.find(item);
+
+								if (i != master.end()) { 
+									i->second = 1; 
+									players[personInt].num_knowns++; //increment that that player has another known card
+									check_num_knowns(players,personInt,cards_per_player);	
+
+								}
+
+							}  else {
+										for (int it = 0; it < player_count; it++) {
+											for (auto playercheck : players[it].weapons) {
+												if ((playercheck.first == item && playercheck.second != 1) || (playercheck.first == item && playercheck.second != 3)) {
+													i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
+
+													if (i != players[personInt].weapons.end()) { 
+													i->second = 2; 
+													}
+												} else if ((playercheck.first == item && playercheck.second == 1) || (playercheck.first == item && playercheck.second == 3)) {
+													COUT << "This card is already one of the extras or in a player's hand!" << ENDL;
+													break;
+												}
+											}
+										}
+									}
+						} else if (checkmaster.first == item && checkmaster.second == 1) {
+							COUT << "This card is already one of the extras or in a player's hand!" << ENDL;
+							break;
 						}
-
-						for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
-							i = players[jter].weapons.find(item);
-							if (jter == personInt) { continue; }
-							if (i != players[jter].weapons.end()) {
-								i->second = 3;
-							}
-						}
-
-						i = master.find(item);
-
-						if (i != master.end()) { 
-							i->second = 1; 
-							players[personInt].num_knowns++; //increment that that player has another known card
-							check_num_knowns(players,personInt,cards_per_player);	
-
-						}
-
-					} else {
-						i = players[personInt].weapons.find(item); //if it's just a maybe, then only update the specified player
-						
-						if (i != players[personInt].weapons.end()) { 
-							i->second = 2; 
-						}
-					
 					}
 
 					break;
@@ -542,38 +576,54 @@ void update_info(VECTOR<Player> & players, int player_count, MAP<STRING, int> & 
 						}
 					}
 
-					if (forsure) {
+					for (auto & checkmaster : master) {
+						if (checkmaster.first == item && checkmaster.second == 0) {
 
-						i = players[personInt].rooms.find(item);
+							if (forsure) {
 
-						if (i != players[personInt].rooms.end()) {
-							i->second = 1;
+								i = players[personInt].rooms.find(item);
+
+								if (i != players[personInt].rooms.end()) {
+									i->second = 1;
+								}
+
+								for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
+									i = players[jter].rooms.find(item);
+									if (jter == personInt) { continue; }
+									if (i != players[jter].rooms.end()) {
+										i->second = 3;
+									}
+								}
+
+								i = master.find(item);
+
+								if (i != master.end()) { 
+									i->second = 1; 
+									players[personInt].num_knowns++; //increment that that player has another known card 				
+									check_num_knowns(players,personInt,cards_per_player);	
+				
+								}
+
+							} else {
+										for (int it = 0; it < player_count; it++) {
+											for (auto playercheck : players[it].rooms) {
+												if ((playercheck.first == item && playercheck.second != 1) || (playercheck.first == item && playercheck.second != 3)) {
+													i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
+
+													if (i != players[personInt].rooms.end()) { 
+													i->second = 2; 
+													}
+												} else if ((playercheck.first == item && playercheck.second == 1) || (playercheck.first == item && playercheck.second == 3)) {
+													COUT << "This card is already one of the extras or in a player's hand!" << ENDL;
+													break;
+												}
+											}
+										}
+									}
+						} else if (checkmaster.first == item && checkmaster.second == 1) {
+							COUT << "This card is already one of the extras or in a player's hand!" << ENDL;
+							break;
 						}
-
-						for (int jter = 0; jter < player_count; jter++) { //set other players' cards to 3
-							i = players[jter].rooms.find(item);
-							if (jter == personInt) { continue; }
-							if (i != players[jter].rooms.end()) {
-								i->second = 3;
-							}
-						}
-
-						i = master.find(item);
-
-						if (i != master.end()) { 
-							i->second = 1; 
-							players[personInt].num_knowns++; //increment that that player has another known card 				
-							check_num_knowns(players,personInt,cards_per_player);	
-		
-						}
-
-					} else {
-						i = players[personInt].rooms.find(item); //if it's just a maybe, then only update the specified player
-
-						if (i != players[personInt].rooms.end()) { 
-							i->second = 2; 
-						}
-						
 					}
 
 					break;
