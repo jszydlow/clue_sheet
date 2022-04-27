@@ -844,11 +844,8 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 	MAP<STRING, int>::iterator i;
 	bool playersHand = false; //will turn if the card is found in a player's category map(s)
 	bool inMiddle = false; //will turn if a player has the specific card while checking the player's category maps
-	//bool unknownCard = false; //will turn if the card is found in a player's category map(s)
-	//bool playersName = false; //if the player's name is printed then this flag will make sure "extra card" is not also printed
-	//bool extraCard = false;
 	int display;
-	//int extraCardCount = 0; //a counter -- if all of the players have 3 and this count = player_count --> will display which are the extra cards
+	int extraCardCount = 0; //a counter -- if all of the players have a 3 and this count = player_count --> will display which are the extra cards
 
 	COUT << ENDL;
 
@@ -876,39 +873,32 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 						if (i->first == x.first && x.second == 3) {
 							inMiddle = true;
 						}
-						else if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
+						if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
 							playersHand = true;
-							//playersName = true;
-							COUT << ENDL << "playersHand in else if: " << playersHand << ENDL;
 							inMiddle = false;
 							break;
 						}
-
 					}
+
 					if ((playersHand == true) && (inMiddle == false)) {
 						COUT << "\t--> " << players[jter].player_name << ENDL;
-						COUT << ENDL << "playersHand in printout: " << playersHand << ENDL;
 						break;
-					} 
+					}
 					else if (inMiddle == true) { 
-						playersHand = false;
-						COUT << ENDL << "playersHand in middle if: " << playersHand << ENDL;
-						break; 
+						extraCardCount++;
 					}
 				}
-				COUT << ENDL << "playersHand after player loop: " << playersHand << ENDL;
-				if ((playersHand == false) && (inMiddle == true)) {
+
+				if ((inMiddle == true) && (extraCardCount == player_count)) {
 					COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
 				}
 			}
 			//reinitialize the flags
-			playersHand = false;
+			playersHand = true;
 			inMiddle = false;
-			//unknownCard = false;
-			//playersName = false;
-			
+			extraCardCount = 0;	
 		}
-/*
+
 	} else if (num == 2) {
 
 		COUT << "WEAPONS:" << ENDL; //title
@@ -919,34 +909,41 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 			COUT << theweapons[iter];
 			i = master.find(theweapons[iter]);
 
-			for (int jter = 0; jter < player_count; jter++) { //iterate through each of the players to check
-				for (auto x : players[jter].weapons) {
-					if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
-						playersHand = true;
-						inMiddle = false;
-						unknownCard = false;
+			if (i != master.end() && i->second == 0) { //iterate through the master list to check for 0s
+				COUT << "\t " << ENDL;
+			}
+
+			else if (i != master.end() && i->second == 1) {
+				for (int jter = 0; jter < player_count; jter++) { //iterate through each of the players to check
+					for (auto x : players[jter].weapons) {
+
+						if (i->first == x.first && x.second == 3) {
+							inMiddle = true;
+						}
+						if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
+							playersHand = true;
+							inMiddle = false;
+							break;
+						}
 					}
-					else if ((i->first == x.first && x.second == 0) || (i->first == x.first && x.second == 2)) {
-						playersHand = false;
-						inMiddle = false;
-						unknownCard = true;
+
+					if ((playersHand == true) && (inMiddle == false)) {
+						COUT << "\t--> " << players[jter].player_name << ENDL;
+						break;
 					}
-					else if (i->first == x.first && x.second == 3) {
-						playersHand = false;
-						inMiddle = true;
-						unknownCard = false;
+					else if (inMiddle == true) { 
+						extraCardCount++;
 					}
 				}
 
-				if (playersHand) {
-					COUT << "\t--> " << players[jter].player_name << ENDL;
+				if ((inMiddle == true) && (extraCardCount == player_count)) {
+					COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
 				}
 			}
-			if (!playersHand && !unknownCard && inMiddle) {
-				COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
-			} else if (!playersHand && unknownCard && !inMiddle) {
-
-			}
+			//reinitialize the flags
+			playersHand = true;
+			inMiddle = false;
+			extraCardCount = 0;	
 		}
 
 
@@ -956,39 +953,48 @@ void print_category(MAP<STRING, int> & master, VECTOR<Player> & players, int num
 		for (int jter = 0; jter <= 6; jter++) { COUT << "-"; } 
 		COUT << ENDL;
 
-		for (int iter = 0; iter < 6; iter++) {
+		for (int iter = 0; iter < 10; iter++) {
 			COUT << therooms[iter];
 			i = master.find(therooms[iter]);
 
-			for (int jter = 0; jter < player_count; jter++) { //iterate through each of the players to check
-				for (auto x : players[jter].rooms) {
-					if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
-						playersHand = true;
-						inMiddle = false;
-						unknownCard = false;
+			if (i != master.end() && i->second == 0) { //iterate through the master list to check for 0s
+				COUT << "\t " << ENDL;
+			}
+		
+
+			else if (i != master.end() && i->second == 1) {
+				for (int jter = 0; jter < player_count; jter++) { //iterate through each of the players to check
+					for (auto x : players[jter].rooms) {
+
+						if (i->first == x.first && x.second == 3) {
+							inMiddle = true;
+						}
+						if (i->first == x.first && x.second == 1) { //item is found in the player's cards so it can't be an extra card
+							playersHand = true;
+							inMiddle = false;
+							break;
+						}
 					}
-					else if ((i->first == x.first && x.second == 0) || (i->first == x.first && x.second == 2)) {
-						playersHand = false;
-						inMiddle = false;
-						unknownCard = true;
+
+					if ((playersHand == true) && (inMiddle == false)) {
+						COUT << "\t--> " << players[jter].player_name << ENDL;
+						break;
 					}
-					else if (i->first == x.first && x.second == 3) {
-						playersHand = false;
-						inMiddle = true;
-						unknownCard = false;
+					else if (inMiddle == true) { 
+						extraCardCount++;
 					}
 				}
 
-				if (playersHand) {
-					COUT << "\t--> " << players[jter].player_name << ENDL;
+				if ((inMiddle == true) && (extraCardCount == player_count)) {
+					COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
 				}
 			}
-			if (!playersHand && !unknownCard && inMiddle) {
-				COUT << "\t--> Extra card" << ENDL; //or if the card is unavailable but not with a player - display that it's in the middle
-			}
+			//reinitialize the flags
+			playersHand = true;
+			inMiddle = false;
+			extraCardCount = 0;	
 		}
-	}
-	*/
+	}	
 
 	for (display = 0; display < 45; display++) { COUT << "-"; } //display ending
 		COUT << ENDL;
