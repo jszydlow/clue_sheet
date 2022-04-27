@@ -95,7 +95,6 @@ int main( ){
 				while(retry) {	//until a valid input is given, continues to ask user for input
 					COUT << "Which category would you like to print?" << ENDL << "(1) Characters" << ENDL << "(2) Weapons" << ENDL << "(3) Rooms" << ENDL;
 					CIN >> categoryInt;
-					COUT << categoryInt;
 					
 					if (categoryInt < 1 || categoryInt > 3) { //error check
 						COUT << "--> Incorrect input -- please try again.." << ENDL;
